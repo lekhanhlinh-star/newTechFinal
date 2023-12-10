@@ -4,6 +4,8 @@ import Login_page from "../pages/LoginPage";
 import {AdminPage} from "../pages/admin/AdminPage";
 
 const Routes=()=>{
+import Home_page from "../pages/home";
+const Routes = () => {
     const routesForPublic = [{
             path:"/",element:<Test></Test>
         },
