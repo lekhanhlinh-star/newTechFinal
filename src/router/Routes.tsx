@@ -3,6 +3,7 @@ import Test from "../components/test";
 import Login_page from "../pages/LoginPage";
 import {AdminPage} from "../pages/admin/AdminPage";
 import Home_page from "../pages/home";
+import {AdminStudentsPage} from "../pages/admin/AdminStudentsPage";
 
 
  const Routes = () => {
@@ -16,6 +17,10 @@ import Home_page from "../pages/home";
          ,
          {
              path: "/admin", element: <AdminPage></AdminPage>
+         }
+         ,
+           {
+             path: "/admin/students/", element: <AdminStudentsPage></AdminStudentsPage>
          }
      ]
      const router = createBrowserRouter(routesForPublic)
