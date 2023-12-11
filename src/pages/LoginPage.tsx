@@ -19,16 +19,17 @@ import {
     Text,
     useToast,
 } from '@chakra-ui/react'
-import axios from 'axios';
 
 
 import React, {useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {ViewIcon, ViewOffIcon} from "@chakra-ui/icons";
 import authAPI from "../api/AuthAPI";
-
+import { FcGoogle } from "react-icons/fc";
+import {getGoogleUrl} from "../utils/getGoogleUrl";
 export default function Login_page() {
-
+    const location=useLocation()
+    let from = ((location.state as any)?.from?.pathname as string) || '/';
     const navagate = useNavigate()
     const [show, setShow] = React.useState(false)
     const toast = useToast()
@@ -42,7 +43,7 @@ export default function Login_page() {
         }));
     }
     const [showPassword, setShowPassword] = useState(false)
-    const host_server=process.env.REACT_APP_SERVER_API_URL
+    const host_server = process.env.REACT_APP_SERVER_API_URL
 
     const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         try {
@@ -156,6 +157,7 @@ export default function Login_page() {
                             <Button
                                 bg={'blue.400'}
                                 color={'white'}
+                                colorScheme='google'
                                 type={"submit"}
                                 _hover={{
                                     bg: 'blue.500',
@@ -163,6 +165,15 @@ export default function Login_page() {
                                 }}>
                                 Sign in
                             </Button>
+                                  <Button as={"a"} href={getGoogleUrl(from)} leftIcon={<FcGoogle fontSize={"30px"}/>}
+
+
+                                colorScheme='red'
+                                type={"submit"}
+                               >
+                                Sign in with google
+                            </Button>
+
                             <Text align={'center'}>
                                 Don't have a user? <Link color={'blue.400'} onClick={() => {
                                 navagate("/signup")

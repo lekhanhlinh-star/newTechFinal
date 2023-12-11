@@ -1,15 +1,5 @@
-import /**
-     * Sends HTTP requests using Axios library.
-     * @module Axios
-     */
-    axios from "axios";
-import /**
-     * Parses a query string into an object representing key-value pairs.
-     *
-     * @param {string} queryString - The query string to parse.
-     * @returns {object} - An object representing the key-value pairs from the query string.
-     */
-    queryString from "query-string";
+import axios from "axios";
+import queryString from "query-string";
 
 
 /**
@@ -55,7 +45,7 @@ const header_default = {
  *   });
  */
 export const AxiosClient = axios.create({
-    baseURL: process.env.REACT_APP_BASE_URL_SERVER||"http://localhost:5000/api/v1", headers: {
+    baseURL: process.env.REACT_APP_BASE_URL_SERVER || "http://localhost:5000/api/v1", headers: {
         'Content-Type': 'application/json'
     }, paramsSerializer: params => queryString.stringify(params)
 })
@@ -94,7 +84,7 @@ const getOne = async (endpoint: string, id: string, headers: object = header_def
  * @returns {Promise} - A promise that resolves with the response data from the GET request.
  */
 const getAll = async (endpoint: string, params: object = {}, headers: object = header_default) => {
-    console.log(endpoint)
+
     return await AxiosClient.get(endpoint, {
         params, headers: headers
     },)
@@ -137,6 +127,7 @@ const createOne = async (endpoint: string, data: object, header: object = header
  *
  * @returns {Promise} - A promise that resolves when the resource is successfully deleted.
  */
+
 const deleteOne = async (endpoint: string, id: string, header: object = header_default) => {
     return await AxiosClient.delete(`${endpoint}/${id}`, {
         headers: header
