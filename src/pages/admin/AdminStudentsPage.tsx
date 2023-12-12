@@ -45,6 +45,7 @@ export function AdminStudentsPage() {
                     students</Button>
                 <Input minW={"777px"} h={"49px"} borderRadius={"8px"} bg={"#E0E0E0"} color={"gray.200"}
                     placeholder={"Search for a student by name or email"}></Input>
+
                 <STUDENT_TABLE></STUDENT_TABLE>
 
             </Stack>

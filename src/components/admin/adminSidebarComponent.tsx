@@ -114,35 +114,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       size="full"
 
       {...rest}>
-      {/* <Box
-        as="a"
-        href={"/profile"}
-        style={{ textDecoration: 'none' }}
-        _focus={{ boxShadow: 'none' }}>
 
-        <Flex
-
-          align="center"
-          p="4"
-          mx="4"
-          mt={3}
-          borderRadius="lg"
-          role="group"
-          cursor="pointer"
-          _hover={{
-            color: 'white',
-            bgGradient: useColorModeValue("linear(to-l,#05020b,#34073d)", "linear(to-l, #7928CA, #FF0080)")
-          }}>
-
-
-          <Avatar src={"http://localhost:5000/uploads/1701528882895.jpg"} ></Avatar>
-          <Text ml={2} fontSize='xs' noOfLines={1} as='b'>
-
-          </Text>
-        </Flex>
-
-
-      </Box> */}
 
       {LinkItems.map((link) => (
         <NavItem key={link.name} icon={link.icon} link={link.link}>
