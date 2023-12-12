@@ -39,7 +39,7 @@ interface LinkItemProps {
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Home', icon: FiHome, link: "/" },
   { name: 'Teacher', icon: CgProfile, link: "/profile" },
-  { name: 'Student/class', icon: FaFacebookMessenger, link: "/message" },
+  { name: 'Student', icon: FaFacebookMessenger, link: "/admin/students" },
   { name: 'Project', icon: FiCompass, link: "/explore" },
   // { name: 'Favourites', icon: FiStar, link: "/" },
   // { name: 'Logout', icon: HiOutlineLogout, link: "/" },
@@ -50,7 +50,7 @@ const LinkItems: Array<LinkItemProps> = [
 export default function AdminSidebarComponent() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
-    <Box minH="100vh"  w={"241px"}  bg={"#152259"} color={"white"}>
+    <Box minH="100vh" w={"241px"} bg={"#152259"} color={"white"}>
       <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
       <Drawer
         isOpen={isOpen}
@@ -77,32 +77,32 @@ interface SidebarProps extends BoxProps {
 }
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
-  const navigate=useNavigate()
-  const toast=useToast()
+  const navigate = useNavigate()
+  const toast = useToast()
 
-  const handelLogout=async()=>{
+  const handelLogout = async () => {
     await axios.post("http://localhost:5000/api/v1/users/logout").
-    then(
-    res=>{
-      console.log(res)
-      localStorage.removeItem('token');
-      toast({
-        title: 'Logout successful',
-         status: 'success',
-          duration: 9000,
-           isClosable: true, position: 'top',
-    })
+      then(
+        res => {
+          console.log(res)
+          localStorage.removeItem('token');
+          toast({
+            title: 'Logout successful',
+            status: 'success',
+            duration: 9000,
+            isClosable: true, position: 'top',
+          })
 
 
-      navigate("/login")
+          navigate("/login")
 
-    }
+        }
 
-    ).catch(
-      e=>{
-        console.log(e)
-      }
-    )
+      ).catch(
+        e => {
+          console.log(e)
+        }
+      )
   }
   return (
     <Box
@@ -114,51 +114,23 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       size="full"
 
       {...rest}>
-      {/* <Box
-        as="a"
-        href={"/profile"}
-        style={{ textDecoration: 'none' }}
-        _focus={{ boxShadow: 'none' }}>
 
-        <Flex
-
-          align="center"
-          p="4"
-          mx="4"
-          mt={3}
-          borderRadius="lg"
-          role="group"
-          cursor="pointer"
-          _hover={{
-            color: 'white',
-            bgGradient: useColorModeValue("linear(to-l,#05020b,#34073d)", "linear(to-l, #7928CA, #FF0080)")
-          }}>
-
-
-          <Avatar src={"http://localhost:5000/uploads/1701528882895.jpg"} ></Avatar>
-          <Text ml={2} fontSize='xs' noOfLines={1} as='b'>
-
-          </Text>
-        </Flex>
-
-
-      </Box> */}
 
       {LinkItems.map((link) => (
         <NavItem key={link.name} icon={link.icon} link={link.link}>
           {link.name}
         </NavItem>
       ))}
-            <Box
+      <Box
         as="a"
         // href={"/profile"}
         style={{ textDecoration: 'none' }}
         _focus={{ boxShadow: 'none' }}>
 
         <Flex
- onClick={
+          onClick={
 
-  handelLogout}
+            handelLogout}
           align="center"
           p="4"
           mx="4"
