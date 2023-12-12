@@ -21,14 +21,14 @@ import {
 } from '@chakra-ui/react'
 
 
-import React, {useState} from 'react';
-import {useLocation, useNavigate} from 'react-router-dom';
-import {ViewIcon, ViewOffIcon} from "@chakra-ui/icons";
+import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import authAPI from "../api/AuthAPI";
 import { FcGoogle } from "react-icons/fc";
-import {getGoogleUrl} from "../utils/getGoogleUrl";
+import { getGoogleUrl } from "../utils/getGoogleUrl";
 export default function Login_page() {
-    const location=useLocation()
+    const location = useLocation()
     let from = ((location.state as any)?.from?.pathname as string) || '/';
     const navagate = useNavigate()
     const [show, setShow] = React.useState(false)
@@ -37,7 +37,7 @@ export default function Login_page() {
         'email': "", 'password': ""
     });
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         setInputLoginBody((prevFormDataPost) => ({
             ...prevFormDataPost, [name]: value,
         }));
@@ -97,7 +97,7 @@ export default function Login_page() {
     >
 
         <Stack direction={['column', 'row']} maxW={'lg'} bg={"white"} mx={"auto"} justify={'center'}
-               borderRadius={"8px"} alignContent={"center"}>
+            borderRadius={"8px"} alignContent={"center"}>
             {/*<Stack align={'center'}>*/}
 
             {/*</Stack>*/}
@@ -125,18 +125,18 @@ export default function Login_page() {
 
                         <FormControl id="email" isRequired>
                             <FormLabel>Email address</FormLabel>
-                            <Input type="email" name={"email"} required={true} onChange={handleInputChange}/>
+                            <Input type="email" name={"email"} required={true} onChange={handleInputChange} />
                         </FormControl>
                         <FormControl id="password" isRequired>
                             <FormLabel>Password</FormLabel>
                             <InputGroup>
                                 <Input type={showPassword ? 'text' : 'password'} name={"password"}
-                                       onChange={handleInputChange}/>
+                                    onChange={handleInputChange} />
                                 <InputRightElement h={'full'}>
                                     <Button
                                         variant={'ghost'}
                                         onClick={() => setShowPassword((showPassword) => !showPassword)}>
-                                        {showPassword ? <ViewIcon/> : <ViewOffIcon/>}
+                                        {showPassword ? <ViewIcon /> : <ViewOffIcon />}
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
@@ -144,7 +144,7 @@ export default function Login_page() {
                         </FormControl>
                         <Stack spacing={10}>
                             <Stack
-                                direction={{base: 'column', sm: 'row'}}
+                                direction={{ base: 'column', sm: 'row' }}
                                 align={'start'}
                                 justify={'space-between'}>
                                 <Checkbox>Remember me</Checkbox>
@@ -165,19 +165,19 @@ export default function Login_page() {
                                 }}>
                                 Sign in
                             </Button>
-                                  <Button as={"a"} href={getGoogleUrl(from)} leftIcon={<FcGoogle fontSize={"30px"}/>}
+                            <Button as={"a"} href={getGoogleUrl(from)} leftIcon={<FcGoogle fontSize={"30px"} />}
 
 
                                 colorScheme='red'
                                 type={"submit"}
-                               >
+                            >
                                 Sign in with google
                             </Button>
 
                             <Text align={'center'}>
                                 Don't have a user? <Link color={'blue.400'} onClick={() => {
-                                navagate("/signup")
-                            }}>Register</Link>
+                                    navagate("/signup")
+                                }}>Register</Link>
                             </Text>
                         </Stack>
 
@@ -229,7 +229,7 @@ export default function Login_page() {
 
 
                 </Box>
-                <Image zIndex={"999"} mr={"180px"} minW={"500px"} src={"img.png"}/>
+                <Image zIndex={"999"} mr={"180px"} minW={"500px"} src={"img.png"} />
             </Stack>
 
         </Stack>
