@@ -17,10 +17,10 @@ import {
     useDisclosure
 } from "@chakra-ui/react";
 import AdminSidebarComponent from "../../components/admin/adminSidebarComponent";
-import {Add_Student_FORM} from "../../components/admin/students/Add_Student_FORM";
-import {Student_Table} from "../../components/admin/students/Student_Table";
+import Add_Student_FORM from "../../components/admin/students/ADD_STUDENT_FORM";
+import {STUDENT_TABLE} from "../../components/admin/students/STUDENT_TABLE";
 import {ArrowLeftIcon, ArrowRightIcon, PhoneIcon} from "@chakra-ui/icons";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import AdminAPI from "../../api/adminAPI";
 
 import {BeatLoader} from "react-spinners";
@@ -38,7 +38,6 @@ export function AdminStudentsPage() {
     const [StudentList, setStudentList] = useState<StudentInfo[]>([]);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
-
     useEffect(() => {
         const params = {
             page: page, limit: 5
@@ -81,7 +80,7 @@ export function AdminStudentsPage() {
                         students</Button>
                     <Input minW={"777px"} h={"49px"} borderRadius={"8px"} bg={"#E0E0E0"} color={"gray.200"}
                            placeholder={"Search for a student by name or email"}></Input>
-                    <Student_Table></Student_Table>
+                    <STUDENT_TABLE></STUDENT_TABLE>
                     <Flex mx={5}>
                         <IconButton onClick={handle_previous_page} variant={"ghost"} aria-label={"ArrowLeft"}>
                             <ArrowLeftIcon></ArrowLeftIcon>
