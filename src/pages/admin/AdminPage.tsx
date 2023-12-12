@@ -1,17 +1,15 @@
 import {Container, Flex} from "@chakra-ui/react";
 import AdminSidebarComponent from "../../components/admin/adminSidebarComponent";
-import {Student_Table} from "../../components/admin/students/Student_Table";
-import {Add_Student_FORM} from "../../components/admin/students/Add_Student_FORM";
+import {STUDENT_TABLE} from "../../components/admin/students/STUDENT_TABLE";
+
 
 export function AdminPage() {
-    return (
-        <>
+    return (<>
             <Flex letterSpacing={2}>
                 < AdminSidebarComponent></AdminSidebarComponent>
                 <Container>
-                    <Add_Student_FORM></Add_Student_FORM>
+
                 </Container>
             </Flex>
-        </>
-    );
+        </>);
 }

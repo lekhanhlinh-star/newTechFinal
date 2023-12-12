@@ -1,6 +1,7 @@
 import {Button, Flex, FormControl, FormLabel, Heading, HStack, Input, Select, Stack} from "@chakra-ui/react";
+import {memo} from "react";
 
-export function Add_Student_FORM() {
+const ADD_STUDENT_FORM = () => {
     return (<>
         <Flex justify={"center"}>
             <Stack direction={['column', 'row']}>
@@ -8,9 +9,9 @@ export function Add_Student_FORM() {
 
                 <form>
                     <Stack spacing={"20px"} fontFamily={"Oswald"}>
-                        <Heading  textAlign={"left"} my={50}>Add Student</Heading>
+                        <Heading textAlign={"left"} my={50}>Add Student</Heading>
 
-                        <HStack spacing={8} >
+                        <HStack spacing={8}>
 
 
                             <FormControl isRequired>
@@ -79,3 +80,4 @@ export function Add_Student_FORM() {
     </>)
 
 }
+export default memo(ADD_STUDENT_FORM);

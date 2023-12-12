@@ -1,6 +1,6 @@
 import {Avatar, Box, Flex, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr} from "@chakra-ui/react";
 // https://www.figma.com/file/KlFNRecPC4tpKx6RKMIKX5/School-Management-Admin-Dashboard-UI-(Community)?type=design&node-id=293-32589&mode=design&t=PQEmOO8MvaplyP75-0
-export function Student_Table() {
+export function STUDENT_TABLE() {
     return (<Box mt={100} overscroll={"scroll"} maxHeight={'500px'}
                  overflowY={"scroll"}
                  overflowX={"hidden"}
