@@ -1,9 +1,10 @@
-import { Avatar, Box, Flex, Heading, Icon, IconButton, Spacer, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useToast } from "@chakra-ui/react";
+import { Avatar, Box, Flex, Heading, Icon, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Spacer, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { apiService } from "../../../api/AxiosClient";
 import AdminAPI from "../../../api/adminAPI";
-import { ArrowLeftIcon, ArrowRightIcon, DeleteIcon, PhoneIcon } from "@chakra-ui/icons";
+import { ArrowLeftIcon, ArrowRightIcon, DeleteIcon, EditIcon, PhoneIcon } from "@chakra-ui/icons";
 import { BeatLoader } from "react-spinners";
+import EDIT_STUDENT_FORM from './EDIT_STUDENT_FORM'
 // https://www.figma.com/file/KlFNRecPC4tpKx6RKMIKX5/School-Management-Admin-Dashboard-UI-(Community)?type=design&node-id=293-32589&mode=design&t=PQEmOO8MvaplyP75-0
 
 interface studentinterface {
@@ -34,13 +35,16 @@ export function STUDENT_TABLE() {
     const [loading, setLoading] = useState(false);
     const [currentprofile, Setcurrentprofile] = useState<studentinterface>()
     const toast = useToast();
+    const { isOpen: isOpen1, onOpen: onOpen1, onClose: onClose1 } = useDisclosure()
 
     useEffect(() => {
         const fetch_data = async () => {
             setLoading(true)
             await AdminAPI.ManageStudent.getAll({ role: "student", page: page, limit: 5 }).then((data) => {
                 console.log(data.data)
-                setstudentlist(data.data)
+                // if (data.data.data.length !== 0) {
+                setstudentlist(data.data.data)
+                // }
             })
                 .catch(err => {
                     console.log(err)
@@ -68,8 +72,8 @@ export function STUDENT_TABLE() {
 
     const handleprofile = async (id: string) => {
         const found = studentlist.find((element) => element._id == id)
+        console.log(found)
         if (found) {
-            console.log(found)
             Setcurrentprofile(found)
         }
     }
@@ -125,16 +129,13 @@ export function STUDENT_TABLE() {
                                                 <Avatar
                                                     src={""}>
                                                 </Avatar>
-                                                <Text ml={5}>{x.firstName + x.lastName}</Text>
+                                                <Text ml={5}>{`${x.firstName} ${x.lastName}`}</Text>
                                             </Flex>
                                         </Td>
                                         {
-                                            x.mssv ? <Td>20110377</Td> : <Td></Td>
+                                            x.mssv ? <Td>{x.mssv}</Td> : <Td></Td>
                                         }
-
                                         <Td> {x.email}</Td>
-
-
                                         <Td> {x.class?.name}</Td>
                                         <Td> {x.gender}</Td>
                                     </Tr>
@@ -182,12 +183,26 @@ export function STUDENT_TABLE() {
                     currentprofile ? <Stack p={"auto"} direction={"column"} alignItems={"center"}  >
                         <Heading>{currentprofile?.mssv}</Heading>
                         <Avatar size={"3xl"}></Avatar>
-                        <Text as={"b"}>{currentprofile.firstName + currentprofile.lastName}</Text>
+                        <Text as={"b"}>{`${currentprofile.firstName}  ${currentprofile.lastName}`}</Text>
 
                         <Text>Major</Text>
                         <Stack direction={"row"} spacing={8} fontSize={"37px"}>
-                            <IconButton aria-label={""} onClick={() => handledelete(currentprofile._id)} icon={<DeleteIcon />}></IconButton>
-                            <IconButton aria-label={""}></IconButton>
+                            <IconButton aria-label={""} onClick={() => handledelete(currentprofile._id)} icon={<DeleteIcon />}>
+
+                            </IconButton>
+                            <IconButton aria-label={""} icon={<EditIcon />} onClick={onOpen1}></IconButton>
+
+                            <Modal closeOnOverlayClick={false} isOpen={isOpen1} onClose={onClose1}>
+                                <ModalOverlay />
+                                <ModalContent minWidth={"900px"} minH={"250px"}>
+                                    <ModalCloseButton />
+                                    <ModalBody minWidth={"900px"} pb={6}>
+                                        <EDIT_STUDENT_FORM data={currentprofile} />
+                                    </ModalBody>
+
+                                </ModalContent>
+                            </Modal>
+
                         </Stack>
                         <Stack direction={"row"} spacing={20}>
                             <Stack direction={"column"}>
@@ -195,10 +210,10 @@ export function STUDENT_TABLE() {
                                 <Text>19</Text>
                             </Stack>
 
-                            <Stack direction={"column"}>
+                            {/* <Stack direction={"column"}>
                                 <Heading size={"ml"}>Gender</Heading>
-                                <Text>Female</Text>
-                            </Stack>
+                                <Text>currentprofile.ge</Text>
+                            </Stack> */}
                         </Stack>
                     </Stack> : null
                 }
@@ -206,3 +221,6 @@ export function STUDENT_TABLE() {
             </Box>
         </Flex >);
 }
+
+
+
