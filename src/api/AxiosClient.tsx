@@ -132,12 +132,12 @@ const deleteOne = async (endpoint: string, id: string, header: object = header_d
 
 
 const ApiGenerator = (apiEndpoint: string) => ({
-        getAll: (params: object) => apiService.getAll(apiEndpoint, params),
-        getOne: (id: string) => apiService.getOne(apiEndpoint, id),
-        createOne: (data: object) => apiService.createOne(apiEndpoint, data),
-        updateOne: (id: string, data: object) => apiService.updateOne(apiEndpoint, id, data),
-        deleteOne: (id: string) => apiService.deleteOne(apiEndpoint, id)
-    });
+    getAll: (params: object) => apiService.getAll(apiEndpoint, params),
+    getOne: (id: string) => apiService.getOne(apiEndpoint, id),
+    createOne: (data: object) => apiService.createOne(apiEndpoint, data),
+    updateOne: (_id: string, data: object) => apiService.updateOne(apiEndpoint, _id, data),
+    deleteOne: (id: string) => apiService.deleteOne(apiEndpoint, id)
+});
 /**
  * @description Provides API service for CRUD operations
  * @name apiService

@@ -55,5 +55,8 @@
     "nodemon": "^3.0.2",
     "regenerator-runtime": "^0.14.0",
     "ts-node": "^10.9.2"
-  }
+  },
+  "rules": {
+    "unused-imports/no-unused-imports": "error"
+}
 }

@@ -5,6 +5,7 @@ import AdminAPI from "../../../api/adminAPI";
 import { ArrowLeftIcon, ArrowRightIcon, DeleteIcon, EditIcon, PhoneIcon } from "@chakra-ui/icons";
 import { BeatLoader } from "react-spinners";
 import EDIT_STUDENT_FORM from './EDIT_STUDENT_FORM'
+
 // https://www.figma.com/file/KlFNRecPC4tpKx6RKMIKX5/School-Management-Admin-Dashboard-UI-(Community)?type=design&node-id=293-32589&mode=design&t=PQEmOO8MvaplyP75-0
 
 interface studentinterface {
@@ -20,12 +21,11 @@ interface studentinterface {
     gender: string,
     phone: string | null,
     birthday: Date | null,
+    schoolYear: string,
     class: {
         id: string,
         name: string,
         start_year: number | null,
-        lecture?: string,
-
     }
 }
 
@@ -63,7 +63,10 @@ export function STUDENT_TABLE() {
     }, [studentlist])
 
     const handle_next_page = () => {
-        setpage(prevState => prevState + 1)
+        if (studentlist) {
+            setpage(prevState => prevState + 1)
+
+        }
 
     }
     const handle_previous_page = () => {
@@ -210,10 +213,6 @@ export function STUDENT_TABLE() {
                                 <Text>19</Text>
                             </Stack>
 
-                            {/* <Stack direction={"column"}>
-                                <Heading size={"ml"}>Gender</Heading>
-                                <Text>currentprofile.ge</Text>
-                            </Stack> */}
                         </Stack>
                     </Stack> : null
                 }

@@ -17,9 +17,10 @@ import {
     useDisclosure
 } from "@chakra-ui/react";
 import AdminSidebarComponent from "../../components/admin/adminSidebarComponent";
+import { PROJECT_TABLE } from "../../components/admin/projects/PROJECT_TABLE";
+import ADD_PROJECT_FORM from "../../components/admin/projects/ADD_PROJECT_FORM";
 
-import ADD_LECTURER_FORM from "../../components/admin/lecturers/ADD_LECTURER_FORM";
-import { LECTURER_TABLE } from '../../components/admin/lecturers/LECTURER_TABLE'
+
 
 
 interface StudentInfo {
@@ -38,12 +39,11 @@ export function AdminProjectsPage() {
 
             < AdminSidebarComponent></AdminSidebarComponent>
             <Stack flex={2} ml={20} mt={20} direction={"column"}>
-                <Button bg={"#2671B1"} color={"white"} h={"41px"} maxW={"235px"} onClick={onOpen}>Add
-                    students</Button>
+                <Button bg={"#2671B1"} color={"white"} h={"41px"} maxW={"235px"} onClick={onOpen}>Add Project</Button>
                 <Input minW={"777px"} h={"49px"} borderRadius={"8px"} bg={"#E0E0E0"} color={"gray.200"}
                     placeholder={"Search for a student by name or email"}></Input>
 
-                <LECTURER_TABLE></LECTURER_TABLE>
+                <PROJECT_TABLE></PROJECT_TABLE>
             </Stack>
 
             <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
@@ -51,7 +51,7 @@ export function AdminProjectsPage() {
                 <ModalContent minWidth={"900px"} minH={"600px"}>
                     <ModalCloseButton />
                     <ModalBody minWidth={"900px"} pb={6}>
-                        <ADD_LECTURER_FORM></ADD_LECTURER_FORM>
+                        <ADD_PROJECT_FORM></ADD_PROJECT_FORM>
                     </ModalBody>
 
                 </ModalContent>

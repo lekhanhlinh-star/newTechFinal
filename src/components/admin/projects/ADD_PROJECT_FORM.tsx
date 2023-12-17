@@ -4,47 +4,34 @@ import { memo, useEffect, useState } from "react";
 import { apiService } from "../../../api/AxiosClient";
 import AdminAPI from "../../../api/adminAPI";
 
-interface user_model {
-    firstName: string,
-    lastName: string,
-    email: string,
-    // gender: string,
-    // phone: string,
-    // password: string,
-    // birthday: Date,
-    role: string,
-    class: string,
-    schoolYear: string
+interface project_model {
+    name: string,
+    description: string,
+    schoolYear: string,
+    major: string,
 }
 
-interface classinterface {
+interface major_model {
     _id: string,
-    name: string,
-    start_year: number,
-    lecture: string | null,
+    name: string
 }
 
 const ADD_PROJECT_FORM = () => {
     const toast = useToast();
-    const [classarr, setclassarr] = useState<classinterface[]>([])
-    const [formDataPost, setFormDataPost] = useState<user_model>(
+    const [formDataPost, setFormDataPost] = useState<project_model>(
         {
-            firstName: "",
-            lastName: "",
-            email: "",
-            // gender: "Female",
-            // phone: "",
-            // password: "",
-            // birthday: new Date(),
-            role: "student",
-            class: "",
-            schoolYear: ""
+            name: "",
+            description: "",
+            schoolYear: "",
+            major: "",
         }
     );
 
+    const [listmajor, setlistmajor] = useState<major_model[]>();
+
     const handleClick = async () => {
         console.log(formDataPost)
-        await AdminAPI.ManageStudent.createOne(formDataPost).then((data) => {
+        await AdminAPI.ManageProject.createOne(formDataPost).then((data) => {
             console.log(data)
             toast({
                 title: "Create successful", status: "success", duration: 9000, isClosable: true, position: "top",
@@ -63,14 +50,17 @@ const ADD_PROJECT_FORM = () => {
         setFormDataPost((prevFormDataPost) => ({
             ...prevFormDataPost, [name]: value,
         }));
-
     };
 
     useEffect(() => {
         const fetch_data = async () => {
-            await apiService.getAll("classes").then(data => {
-                console.log(data.data)
-                setclassarr(data.data.data)
+            await AdminAPI.ManageMajor.getAll({}).then(data => {
+                setlistmajor(data.data.data)
+                if (!formDataPost.major && data.data.data) {
+                    setFormDataPost((prevFormDataPost) => ({
+                        ...prevFormDataPost, ["major"]: data.data.data[0]._id,
+                    }));
+                }
             }).catch(err => {
                 console.log(err)
             })
@@ -78,7 +68,7 @@ const ADD_PROJECT_FORM = () => {
         fetch_data()
     }, [])
 
-    const years = Array.from({ length: 50 }, (_, index) => 2023 - index);
+    const years = Array.from({ length: 10 }, (_, index) => 2023 - index);
 
     return (<>
         <Flex justify={"center"}>
@@ -91,48 +81,19 @@ const ADD_PROJECT_FORM = () => {
                         <HStack spacing={14} mb={5}>
 
                             <FormControl isRequired>
-                                <FormLabel>First Name</FormLabel>
-                                <Input type={"text"} onChange={handleInputChange} placeholder={"First Name"} name="firstName"></Input>
+                                <FormLabel>Name</FormLabel>
+                                <Input type={"text"} onChange={handleInputChange} placeholder={"Name"} name="name"></Input>
                             </FormControl>
 
                             <FormControl isRequired>
-                                <FormLabel>Last Name</FormLabel>
-                                <Input type={"text"} onChange={handleInputChange} placeholder={"Last Name"} name="lastName"></Input>
+                                <FormLabel>Description</FormLabel>
+                                <Input type={"text"} onChange={handleInputChange} placeholder={"Description"} name="description"></Input>
                             </FormControl>
-                            <FormControl isRequired>
-                                <FormLabel>Class</FormLabel>
-                                {
-                                    classarr.length !== 0 ? (<Select onChange={handleInputChange} name="class">
-                                        {
-                                            classarr.map(x =>
-                                                <option value={`${x._id}`} >{x.name}</option>
-                                            )
-                                        }
 
-                                    </Select>) :
-                                        <Input type={"text"} onChange={handleInputChange} placeholder={"class"} name="class"></Input>
-
-                                }
-
-                            </FormControl>
 
                         </HStack>
 
                         <HStack spacing={14} mb={5}>
-                            {/* <FormControl isRequired>
-                                <FormLabel>Gender</FormLabel>
-                                <Select defaultValue={"Female"} onChange={handleInputChange} name="gender">
-                                    <option value='Female' >Female</option>
-                                    <option value='Male'>Male</option>
-                                </Select>
-                            </FormControl> */}
-
-
-
-                            <FormControl isRequired>
-                                <FormLabel>Email Address</FormLabel>
-                                <Input type={"email"} onChange={handleInputChange} placeholder={"email"} name="email"></Input>
-                            </FormControl>
 
                             <FormControl isRequired>
                                 <FormLabel>School Year</FormLabel>
@@ -145,21 +106,25 @@ const ADD_PROJECT_FORM = () => {
                                 </Select>
                             </FormControl>
 
+                            <FormControl isRequired>
+                                <FormLabel>Major</FormLabel>
+                                {
+                                    listmajor && listmajor.length !== 0 ? (<Select onChange={handleInputChange} name="major">
+                                        {
+                                            listmajor.map(x =>
+                                                <option value={`${x._id}`} >{x.name}</option>
+                                            )
+                                        }
+
+                                    </Select>) :
+                                        <Input type={"text"} onChange={handleInputChange} placeholder={"major"} name="major"></Input>
+
+                                }
+
+                            </FormControl>
 
                         </HStack>
                         <HStack spacing={14} mb={5}>
-
-
-                            {/* <FormControl isRequired>
-                                <FormLabel>Password</FormLabel>
-                                <Input type={"password"} onChange={handleInputChange} name="password" placeholder={"Password"}></Input>
-                            </FormControl> */}
-                            {/* <FormControl isRequired>
-                                <FormLabel>Birth day</FormLabel>
-                                <Input type={"date"} onChange={handleInputChange} name="birthday" placeholder={"Password"}></Input>
-                            </FormControl> */}
-
-
                         </HStack>
                         <Button w={"full"} onClick={handleClick}>Add</Button>
 

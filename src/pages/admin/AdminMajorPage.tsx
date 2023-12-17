@@ -17,14 +17,8 @@ import {
     useDisclosure
 } from "@chakra-ui/react";
 import AdminSidebarComponent from "../../components/admin/adminSidebarComponent";
-import Add_Student_FORM from "../../components/admin/students/ADD_STUDENT_FORM";
-import { ArrowLeftIcon, ArrowRightIcon, PhoneIcon } from "@chakra-ui/icons";
-import { useEffect, useRef, useState } from "react";
-import AdminAPI from "../../api/adminAPI";
-
-import { BeatLoader } from "react-spinners";
-import ADD_LECTURER_FORM from "../../components/admin/lecturers/ADD_LECTURER_FORM";
-import { LECTURER_TABLE } from '../../components/admin/lecturers/LECTURER_TABLE'
+import { MAJOR_TABLE } from "../../components/admin/majors/MAJOR_TABLE";
+import ADD_MAJOR_FORM from "../../components/admin/majors/ADD_MAJOR_FORM";
 
 
 interface StudentInfo {
@@ -48,7 +42,7 @@ export function AdminMajorPage() {
                 <Input minW={"777px"} h={"49px"} borderRadius={"8px"} bg={"#E0E0E0"} color={"gray.200"}
                     placeholder={"Search for a student by name or email"}></Input>
 
-                <LECTURER_TABLE></LECTURER_TABLE>
+                <MAJOR_TABLE></MAJOR_TABLE>
             </Stack>
 
             <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
@@ -56,7 +50,7 @@ export function AdminMajorPage() {
                 <ModalContent minWidth={"900px"} minH={"600px"}>
                     <ModalCloseButton />
                     <ModalBody minWidth={"900px"} pb={6}>
-                        <ADD_LECTURER_FORM></ADD_LECTURER_FORM>
+                        <ADD_MAJOR_FORM></ADD_MAJOR_FORM>
                     </ModalBody>
 
                 </ModalContent>

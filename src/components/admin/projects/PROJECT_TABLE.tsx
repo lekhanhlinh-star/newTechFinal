@@ -1,4 +1,4 @@
-import { Avatar, Box, Flex, Heading, Icon, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Spacer, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
+import { Avatar, Box, Button, Flex, Heading, Icon, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spacer, Stack, Table, TableCaption, TableContainer, Tbody, Td, Text, Tfoot, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { apiService } from "../../../api/AxiosClient";
 import AdminAPI from "../../../api/adminAPI";
@@ -6,47 +6,68 @@ import { ArrowLeftIcon, ArrowRightIcon, DeleteIcon, EditIcon, PhoneIcon } from "
 import { BeatLoader } from "react-spinners";
 import EDIT_LECTURER_FORM from "../lecturers/EDIT_LECTURER_FORM";
 import EDIT_PROJECT_FORM from "./EDIT_PROJECT_FORM";
+import React from "react";
 // import EDIT_STUDENT_FORM from './EDIT_PROJECT_FORM'
 // https://www.figma.com/file/KlFNRecPC4tpKx6RKMIKX5/School-Management-Admin-Dashboard-UI-(Community)?type=design&node-id=293-32589&mode=design&t=PQEmOO8MvaplyP75-0
 
-interface studentinterface {
-    _id: string,
-    authType: string | null,
-    authGoogleId: string | null,
-    role: string | null,
-    firstName: string,
-    lastName: string,
-    mssv: string | null,
-    email: string,
-    password: string | null,
-    gender: string,
-    phone: string | null,
-    birthday: Date | null,
-    class: {
-        id: string,
-        name: string,
-        start_year: number | null,
-        lecture?: string,
+interface projectInterface {
+    status: string;
+    review: string;
+    score: number;
+    _id: string;
+    name: string;
+    description: string;
+    schoolYear: string;
+    major: {
+        _id: string;
+        name: string;
+        description: string;
+    };
+    report: any[];
+    lecturer: string | null;
 
-    }
+    createdAt: string;
+    updatedAt: string;
+}
+
+interface Student {
+    role: string;
+    authGoogleId: string | null;
+    authType: string;
+    _id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    createdAt: string;
+    updatedAt: string;
+    project: string;
+    birthday: string;
+    class: {
+        _id: string;
+        name: string;
+        start_year: string;
+        __v: number;
+    };
+    gender: string;
+    schoolYear: string;
 }
 
 export function PROJECT_TABLE() {
-    const [studentlist, setstudentlist] = useState<studentinterface[]>([])
+    const [projectList, setprojectList] = useState<projectInterface[]>([])
     const [page, setpage] = useState(1)
     const [loading, setLoading] = useState(false);
-    const [currentprofile, Setcurrentprofile] = useState<studentinterface>()
+    const [currentproject, Setcurrentproject] = useState<projectInterface>()
     const toast = useToast();
+    const [liststudent, setliststudent] = useState<Student[]>([])
     const { isOpen: isOpen1, onOpen: onOpen1, onClose: onClose1 } = useDisclosure()
+
 
     useEffect(() => {
         const fetch_data = async () => {
             setLoading(true)
-            await AdminAPI.ManageStudent.getAll({ role: "student", page: page, limit: 5 }).then((data) => {
-                console.log(data.data)
-                // if (data.data.data.length !== 0) {
-                setstudentlist(data.data.data)
-                // }
+            await AdminAPI.ManageProject.getAll({ page: page, limit: 5 }).then((data) => {
+                console.log(data.data.data)
+                setprojectList(data.data.data)
             })
                 .catch(err => {
                     console.log(err)
@@ -59,37 +80,44 @@ export function PROJECT_TABLE() {
 
 
     useEffect(() => {
-        if (studentlist) {
-            Setcurrentprofile(studentlist[0])
+        if (projectList) {
+            Setcurrentproject(projectList[0])
         }
-    }, [studentlist])
+    }, [projectList])
 
     const handle_next_page = () => {
-        setpage(prevState => prevState + 1)
+        if (projectList.length != 0) {
+            setpage(prevState => prevState + 1)
+        }
 
     }
     const handle_previous_page = () => {
         setpage((prevState) => Math.max(1, prevState - 1)); // Make sure page doesn't go below 1
     };
 
-    const handleprofile = async (id: string) => {
-        const found = studentlist.find((element) => element._id == id)
+    const handleproject = async (id: string | undefined) => {
+
+        const found = projectList.find((element) => element._id == id)
         console.log(found)
         if (found) {
-            Setcurrentprofile(found)
+            Setcurrentproject(found)
         }
+        await AdminAPI.ManageStudent.getAll({ project: id }).then(data => {
+            console.log(data.data.data)
+            setliststudent(data.data.data)
+        }).catch(err => {
+            console.log(err)
+        })
+
     }
 
-    const handledelete = async (id: string) => {
-        await AdminAPI.ManageStudent.deleteOne(id).then(data => {
+    const handledelete = async (id: any) => {
+        await AdminAPI.ManageProject.deleteOne(id).then(data => {
             console.log(data)
             toast({
-                title: "Delete successful", status: "success", duration: 9000, isClosable: true, position: "top",
+                title: "Delete successful", status: "success", duration: 9000, isClosable: true, position: "top", onCloseComplete: () => window.location.reload()
             });
-            const found = studentlist.find((element) => element._id == id)
-            if (found) {
-                setstudentlist(studentlist.filter(item => item !== found));
-            }
+
         }
         ).catch(err => {
             console.log(err)
@@ -98,6 +126,24 @@ export function PROJECT_TABLE() {
             });
         })
     }
+
+    const OverlayOne = () => (
+        <ModalOverlay
+            bg='blackAlpha.300'
+            backdropFilter='blur(10px) hue-rotate(90deg)'
+        />
+    )
+
+    const OverlayTwo = () => (
+        <ModalOverlay
+            bg='none'
+            backdropFilter='auto'
+            backdropInvert='80%'
+            backdropBlur='2px'
+        />
+    )
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const [overlay, setOverlay] = React.useState(<OverlayOne />)
 
     return (
 
@@ -111,18 +157,21 @@ export function PROJECT_TABLE() {
                         <Thead fontFamily={'Kumbh Sans'} fontSize={"25px"} fontStyle={"b"}>
                             <Tr>
                                 <Th>Name</Th>
-                                <Th>Student ID</Th>
-                                <Th>Email address</Th>
-                                <Th>Class</Th>
-                                <Th>Gender</Th>
+                                <Th>School Year</Th>
+                                <Th>Major</Th>
+                                <Th>Status</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
                             {
-                                studentlist ? studentlist.map((x) =>
+                                projectList ? projectList.map((x) =>
                                     <Tr
                                         cursor="pointer"
-                                        onClick={() => handleprofile(x._id)}
+                                        onClick={() => {
+                                            setOverlay(<OverlayTwo />)
+                                            handleproject(x._id)
+                                            onOpen()
+                                        }}
                                         _hover={{
                                             color: 'white', bg: "#2671B1"
                                         }}>
@@ -131,30 +180,121 @@ export function PROJECT_TABLE() {
                                                 <Avatar
                                                     src={""}>
                                                 </Avatar>
-                                                <Text ml={5}>{`${x.firstName} ${x.lastName}`}</Text>
+                                                <Text ml={5}>{`${x.name}`}</Text>
                                             </Flex>
                                         </Td>
-                                        {
-                                            x.mssv ? <Td>{x.mssv}</Td> : <Td></Td>
-                                        }
-                                        <Td> {x.email}</Td>
-                                        <Td> {x.class?.name}</Td>
-                                        <Td> {x.gender}</Td>
+                                        <Td> {x.schoolYear}</Td>
+                                        <Td> {x.major.name}</Td>
+                                        <Td>{x.status}</Td>
+
                                     </Tr>
+
                                 ) : null
                             }
-
-
-
-
                         </Tbody>
+                        <Modal isCentered isOpen={isOpen} onClose={onClose} size={"xl"}>
+
+                            {overlay}
+                            <ModalContent css={{
+                                width: "fit-content",
+                                minWidth: "600px",
+                                margin: "auto",
+                                fontSize: "20px"
+                            }}>
+                                <ModalHeader>Details</ModalHeader>
+                                <ModalCloseButton />
+
+                                <ModalBody>
+                                    <TableContainer>
+                                        <Table variant='striped' colorScheme='#0076ff' >
+                                            <Tbody flex={1}>
+                                                <Tr>
+                                                    <Td>Name</Td>
+                                                    <Td>{currentproject?.name}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>Description</Td>
+                                                    <Td>{currentproject?.description}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>Review</Td>
+                                                    <Td>{currentproject?.review}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>Score</Td>
+                                                    {
+                                                        currentproject && currentproject?.score >= 0 ? <Td>{currentproject?.score}</Td> : <Td>0</Td>
+                                                    }
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>School Year</Td>
+                                                    <Td>{currentproject?.schoolYear}</Td>
+                                                </Tr>
+
+                                                <Tr>
+                                                    <Td>Major</Td>
+                                                    <Td>
+                                                        {currentproject?.major.name}
+                                                    </Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>Lecturer</Td>
+                                                    <Td>{currentproject?.lecturer}</Td>
+                                                </Tr>
+
+                                                <Tr>
+                                                    <Td>Students</Td>
+                                                    <Td>
+                                                        {
+                                                            liststudent.map((x: any) => (
+                                                                <div key={x._id}>
+                                                                    studentId : {x.mssv}
+                                                                    <br /><br />
+                                                                    name : {x.firstName} {x.lastName}
+                                                                    <br /><br />
+                                                                    class : {x.class.name}
+                                                                    <br />
+                                                                    <br />
+                                                                </div>
+                                                            ))
+                                                        }
+                                                    </Td>
+                                                </Tr>
+
+                                            </Tbody>
+
+                                        </Table>
+                                    </TableContainer>
+                                </ModalBody>
+
+                                <ModalFooter>
+                                    <IconButton aria-label={""} icon={<DeleteIcon />} size={"md"} mr={5} onClick={() => {
+                                        handledelete(currentproject?._id)
+                                        onClose()
+                                    }}></IconButton>
+                                    <IconButton aria-label={""} icon={<EditIcon />} onClick={onOpen1} mr={5} ></IconButton>
+                                    <Modal closeOnOverlayClick={false} isOpen={isOpen1} onClose={onClose1}>
+                                        <ModalOverlay />
+                                        <ModalContent minWidth={"900px"} minH={"250px"}>
+                                            <ModalCloseButton />
+                                            <ModalBody minWidth={"900px"} pb={6}>
+                                                <EDIT_PROJECT_FORM data={currentproject} />
+                                            </ModalBody>
+
+                                        </ModalContent>
+                                    </Modal>
+                                    <Button onClick={onClose}>Close</Button>
+                                </ModalFooter>
+                            </ModalContent>
+
+                        </Modal>
                     </Table>
                 </TableContainer>
                 <Spacer>
 
                 </Spacer>
 
-                {studentlist.length == 0 ? <Box>
+                {projectList.length == 0 ? <Box>
                     <Text fontSize={50} color={"red"}>There are no records</Text>
                 </Box> : null}
                 <Spacer>
@@ -180,42 +320,6 @@ export function PROJECT_TABLE() {
             </Flex>
 
 
-            <Box flex={1} >
-                {
-                    currentprofile ? <Stack p={"auto"} direction={"column"} alignItems={"center"}  >
-                        <Heading>{currentprofile?.mssv}</Heading>
-                        <Avatar size={"3xl"}></Avatar>
-                        <Text as={"b"}>{`${currentprofile.firstName}  ${currentprofile.lastName}`}</Text>
-
-                        <Text>Major</Text>
-                        <Stack direction={"row"} spacing={8} fontSize={"37px"}>
-                            <IconButton aria-label={""} onClick={() => handledelete(currentprofile._id)} icon={<DeleteIcon />}>
-
-                            </IconButton>
-                            <IconButton aria-label={""} icon={<EditIcon />} onClick={onOpen1}></IconButton>
-
-                            <Modal closeOnOverlayClick={false} isOpen={isOpen1} onClose={onClose1}>
-                                <ModalOverlay />
-                                <ModalContent minWidth={"900px"} minH={"250px"}>
-                                    <ModalCloseButton />
-                                    <ModalBody minWidth={"900px"} pb={6}>
-                                        <EDIT_PROJECT_FORM data={currentprofile} />
-                                    </ModalBody>
-
-                                </ModalContent>
-                            </Modal>
-
-                        </Stack>
-                        <Stack direction={"row"} spacing={20}>
-                            <Stack direction={"column"}>
-                                <Heading size={"ml"}>Age</Heading>
-                                <Text>19</Text>
-                            </Stack>
-                        </Stack>
-                    </Stack> : null
-                }
-
-            </Box>
         </Flex >);
 }
 

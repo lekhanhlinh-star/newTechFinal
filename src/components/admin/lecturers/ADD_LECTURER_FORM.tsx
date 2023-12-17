@@ -9,7 +9,8 @@ interface user_model {
     lastName: string,
     email: string,
     role: string,
-
+    phone: string,
+    gender: string
 }
 
 interface classinterface {
@@ -27,7 +28,9 @@ const ADD_LECTURER_FORM = () => {
             firstName: "",
             lastName: "",
             email: "",
-            role: "lecturer"
+            role: "lecturer",
+            phone: "",
+            gender: "Female"
         }
     );
 
@@ -67,14 +70,14 @@ const ADD_LECTURER_FORM = () => {
         fetch_data()
     }, [])
 
-    const years = Array.from({ length: 50 }, (_, index) => 2023 - index);
+    const years = Array.from({ length: 10 }, (_, index) => 2023 - index);
 
     return (<>
         <Flex justify={"center"}>
             <Stack direction={['column', 'row']}>
                 <form>
 
-                    <Stack spacing={"20px"} fontFamily={"Oswald"}>
+                    <Stack fontFamily={"Oswald"}>
                         <Heading my={50} textAlign="center" >Add Lecturer</Heading>
 
                         <HStack spacing={14} mb={5}>
@@ -92,14 +95,28 @@ const ADD_LECTURER_FORM = () => {
 
                         <HStack spacing={14} mb={5}>
                             <FormControl isRequired>
-                                <FormLabel>Email Address</FormLabel>
-                                <Input type={"email"} onChange={handleInputChange} placeholder={"email"} name="email"></Input>
+                                <FormLabel>Gender</FormLabel>
+                                <Select defaultValue={"Female"} onChange={handleInputChange} name="gender">
+                                    <option value='Female' >Female</option>
+                                    <option value='Male'>Male</option>
+                                </Select>
                             </FormControl>
-
-
-
-
+                            <FormControl isRequired>
+                                <FormLabel>Email Address</FormLabel>
+                                <Input type={"text"} onChange={handleInputChange} placeholder={"Last Name"} name="lastName"></Input>
+                            </FormControl>
                         </HStack>
+                        <HStack spacing={14} mb={5}>
+                            <FormControl isRequired>
+                                <FormLabel>Email Address</FormLabel>
+                                <Input type={"email"} onChange={handleInputChange} placeholder={"Email"} name="email"></Input>
+                            </FormControl>
+                            <FormControl isRequired>
+                                <FormLabel>Phone Number</FormLabel>
+                                <Input type={"number"} onChange={handleInputChange} placeholder={"Phone"} name="phone"></Input>
+                            </FormControl>
+                        </HStack>
+
                         <HStack spacing={14} mb={5}>
                         </HStack>
                         <Button w={"full"} onClick={handleClick}>Add</Button>

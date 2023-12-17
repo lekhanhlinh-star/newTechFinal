@@ -8,10 +8,9 @@ interface user_model {
     firstName: string,
     lastName: string,
     email: string,
-    // gender: string,
-    // phone: string,
-    // password: string,
-    // birthday: Date,
+    gender: string,
+    major: string,
+    birthday: Date,
     role: string,
     class: string,
     schoolYear: string
@@ -27,15 +26,19 @@ interface classinterface {
 const ADD_STUDENT_FORM = () => {
     const toast = useToast();
     const [classarr, setclassarr] = useState<classinterface[]>([])
+    const [majorarr, setmajorarr] = useState<any[]>([])
+
+
     const [formDataPost, setFormDataPost] = useState<user_model>(
         {
             firstName: "",
             lastName: "",
             email: "",
-            // gender: "Female",
+            gender: "Female",
             // phone: "",
             // password: "",
-            // birthday: new Date(),
+            major: "",
+            birthday: new Date(),
             role: "student",
             class: "",
             schoolYear: ""
@@ -78,7 +81,21 @@ const ADD_STUDENT_FORM = () => {
         fetch_data()
     }, [])
 
-    const years = Array.from({ length: 50 }, (_, index) => 2023 - index);
+
+    useEffect(() => {
+        const fetch_data = async () => {
+            await apiService.getAll("majors").then(data => {
+                console.log(data.data)
+                setmajorarr(data.data.data)
+            }).catch(err => {
+                console.log(err)
+            })
+        }
+        fetch_data()
+    }, [])
+
+
+    const years = Array.from({ length: 10 }, (_, index) => 2023 - index);
 
     return (<>
         <Flex justify={"center"}>
@@ -119,13 +136,13 @@ const ADD_STUDENT_FORM = () => {
                         </HStack>
 
                         <HStack spacing={14} mb={5}>
-                            {/* <FormControl isRequired>
+                            <FormControl isRequired>
                                 <FormLabel>Gender</FormLabel>
                                 <Select defaultValue={"Female"} onChange={handleInputChange} name="gender">
                                     <option value='Female' >Female</option>
                                     <option value='Male'>Male</option>
                                 </Select>
-                            </FormControl> */}
+                            </FormControl>
 
 
 
@@ -149,21 +166,28 @@ const ADD_STUDENT_FORM = () => {
                         </HStack>
                         <HStack spacing={14} mb={5}>
 
-
-                            {/* <FormControl isRequired>
-                                <FormLabel>Password</FormLabel>
-                                <Input type={"password"} onChange={handleInputChange} name="password" placeholder={"Password"}></Input>
-                            </FormControl> */}
-                            {/* <FormControl isRequired>
+                            <FormControl isRequired>
                                 <FormLabel>Birth day</FormLabel>
-                                <Input type={"date"} onChange={handleInputChange} name="birthday" placeholder={"Password"}></Input>
-                            </FormControl> */}
+                                <Input type={"date"} onChange={handleInputChange} name="birthday" placeholder={"Birthday"}></Input>
+                            </FormControl>
+                            <FormControl isRequired>
+                                <FormLabel>Major</FormLabel>
+                                {
+                                    majorarr.length !== 0 ? (<Select onChange={handleInputChange} name="major">
+                                        {
+                                            majorarr.map(x =>
+                                                <option value={`${x._id}`} >{x.name}</option>
+                                            )
+                                        }
 
+                                    </Select>) :
+                                        <Input type={"text"} onChange={handleInputChange} placeholder={"major"} name="major"></Input>
+
+                                }
+                            </FormControl>
 
                         </HStack>
                         <Button w={"full"} onClick={handleClick}>Add</Button>
-
-
                     </Stack>
 
                 </form>

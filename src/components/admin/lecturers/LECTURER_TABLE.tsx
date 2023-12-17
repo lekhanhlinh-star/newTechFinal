@@ -7,33 +7,21 @@ import { BeatLoader } from "react-spinners";
 import EDIT_STUDENT_FORM from './EDIT_LECTURER_FORM'
 // https://www.figma.com/file/KlFNRecPC4tpKx6RKMIKX5/School-Management-Admin-Dashboard-UI-(Community)?type=design&node-id=293-32589&mode=design&t=PQEmOO8MvaplyP75-0
 
-interface studentinterface {
+interface lecturerinterface {
     _id: string,
-    authType: string | null,
-    authGoogleId: string | null,
-    role: string | null,
     firstName: string,
     lastName: string,
-    mssv: string | null,
     email: string,
-    password: string | null,
     gender: string,
     phone: string | null,
     birthday: Date | null,
-    class: {
-        id: string,
-        name: string,
-        start_year: number | null,
-        lecture?: string,
-
-    }
 }
 
 export function LECTURER_TABLE() {
-    const [studentlist, setstudentlist] = useState<studentinterface[]>([])
+    const [lecturerlist, setlecturerlist] = useState<lecturerinterface[]>([])
     const [page, setpage] = useState(1)
     const [loading, setLoading] = useState(false);
-    const [currentprofile, Setcurrentprofile] = useState<studentinterface>()
+    const [currentprofile, Setcurrentprofile] = useState<lecturerinterface>()
     const toast = useToast();
     const { isOpen: isOpen1, onOpen: onOpen1, onClose: onClose1 } = useDisclosure()
 
@@ -43,7 +31,7 @@ export function LECTURER_TABLE() {
             await AdminAPI.ManageLectures.getAll({ role: "lecturer", page: page, limit: 5 }).then((data) => {
                 console.log(data.data)
                 // if (data.data.data.length !== 0) {
-                setstudentlist(data.data.data)
+                setlecturerlist(data.data.data)
                 // }
             })
                 .catch(err => {
@@ -57,10 +45,10 @@ export function LECTURER_TABLE() {
 
 
     useEffect(() => {
-        if (studentlist) {
-            Setcurrentprofile(studentlist[0])
+        if (lecturerlist) {
+            Setcurrentprofile(lecturerlist[0])
         }
-    }, [studentlist])
+    }, [lecturerlist])
 
     const handle_next_page = () => {
         setpage(prevState => prevState + 1)
@@ -71,7 +59,7 @@ export function LECTURER_TABLE() {
     };
 
     const handleprofile = async (id: string) => {
-        const found = studentlist.find((element) => element._id == id)
+        const found = lecturerlist.find((element) => element._id == id)
         console.log(found)
         if (found) {
             Setcurrentprofile(found)
@@ -84,9 +72,9 @@ export function LECTURER_TABLE() {
             toast({
                 title: "Delete successful", status: "success", duration: 9000, isClosable: true, position: "top",
             });
-            const found = studentlist.find((element) => element._id == id)
+            const found = lecturerlist.find((element) => element._id == id)
             if (found) {
-                setstudentlist(studentlist.filter(item => item !== found));
+                setlecturerlist(lecturerlist.filter(item => item !== found));
             }
         }
         ).catch(err => {
@@ -110,12 +98,13 @@ export function LECTURER_TABLE() {
                             <Tr>
                                 <Th>Name</Th>
                                 <Th>Email address</Th>
-
+                                <Th>Gender</Th>
+                                <Th>Phone</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
                             {
-                                studentlist ? studentlist.map((x) =>
+                                lecturerlist ? lecturerlist.map((x) =>
                                     <Tr
                                         cursor="pointer"
                                         onClick={() => handleprofile(x._id)}
@@ -134,6 +123,10 @@ export function LECTURER_TABLE() {
 
                                         <Td> {x.email}</Td>
 
+                                        <Td>{x.gender}</Td>
+                                        <Td>{x.gender}</Td>
+
+
                                     </Tr>
                                 ) : null
                             }
@@ -148,7 +141,7 @@ export function LECTURER_TABLE() {
 
                 </Spacer>
 
-                {studentlist.length == 0 ? <Box>
+                {lecturerlist.length == 0 ? <Box>
                     <Text fontSize={50} color={"red"}>There are no records</Text>
                 </Box> : null}
                 <Spacer>
@@ -177,7 +170,7 @@ export function LECTURER_TABLE() {
             <Box flex={1} >
                 {
                     currentprofile ? <Stack p={"auto"} direction={"column"} alignItems={"center"}  >
-                        <Heading>{currentprofile?.mssv}</Heading>
+                        {/* <Heading>{currentprofile?.mssv}</Heading> */}
                         <Avatar size={"3xl"}></Avatar>
                         <Text as={"b"}>{`${currentprofile.firstName}  ${currentprofile.lastName}`}</Text>
 
