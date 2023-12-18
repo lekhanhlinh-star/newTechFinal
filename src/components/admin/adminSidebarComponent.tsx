@@ -42,6 +42,8 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Student', icon: FaFacebookMessenger, link: "/admin/students" },
   { name: 'Project', icon: FiCompass, link: "/admin/projects" },
   { name: 'Major', icon: FiCompass, link: "/admin/majors" },
+  { name: 'Notification', icon: FiCompass, link: "/admin/notifications" },
+
 
 ]
 

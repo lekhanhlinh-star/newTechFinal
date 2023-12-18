@@ -17,9 +17,6 @@ interface major_model {
 }
 
 const EDIT_PROJECT_FORM = (data: any) => {
-    console.log(data)
-    console.log(data.data.major.name)
-
     const toast = useToast();
     const [formDataPost, setFormDataPost] = useState<project_model>(
         {

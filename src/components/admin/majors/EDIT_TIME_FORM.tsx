@@ -1,31 +1,35 @@
 import { Button, Flex, FormControl, FormLabel, Heading, HStack, Input, Select, Stack, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { memo, useEffect, useState } from "react";
-import { apiService } from "../../../api/AxiosClient";
 import AdminAPI from "../../../api/adminAPI";
+import DateTimePicker from "react-datetime-picker";
 
-interface major_interface {
-    name: string,
-    description: string
+interface major_model {
+    timeRegistrationProjectStart: Date;
+    timeRegistrationProjectEnd: Date;
+
 }
 
-
-
-const ADD_LECTURER_FORM = () => {
+const EDIT_TIME_FORM = (data: any) => {
     const toast = useToast();
-    const [formDataPost, setFormDataPost] = useState<major_interface>(
+    const [formDataPost, setFormDataPost] = useState<major_model>(
         {
-            name: "",
-            description: ""
+            timeRegistrationProjectStart: new Date(data.data.timeRegistrationProjectStart) || new Date(),
+            timeRegistrationProjectEnd: new Date(data.data.timeRegistrationProjectEnd) || new Date(),
         }
     );
 
     const handleClick = async () => {
         console.log(formDataPost)
-        await AdminAPI.ManageMajor.createOne(formDataPost).then((data) => {
+        await AdminAPI.ManageMajor.updateOne(data.data._id, formDataPost).then(async (data) => {
             console.log(data)
             toast({
-                title: "Create successful", status: "success", duration: 1000, isClosable: true, position: "top", onCloseComplete: () => window.location.reload()
+                title: "Update successful",
+                status: "success",
+                duration: 1000,
+                isClosable: true,
+                position: "top",
+                onCloseComplete: () => window.location.reload()
             });
         }).catch(err => {
             console.log(err)
@@ -41,8 +45,8 @@ const ADD_LECTURER_FORM = () => {
         setFormDataPost((prevFormDataPost) => ({
             ...prevFormDataPost, [name]: value,
         }));
-
     };
+
 
 
     return (<>
@@ -51,12 +55,15 @@ const ADD_LECTURER_FORM = () => {
                 <form>
 
                     <Stack spacing={"20px"} fontFamily={"Oswald"} minW={500}>
-                        <Heading my={50} textAlign="center" >Add Major</Heading>
+                        <Heading my={50} textAlign="center" >Edit Major</Heading>
 
                         <HStack spacing={14} mb={5}>
                             <FormControl isRequired>
                                 <FormLabel size={"lg"}>Name</FormLabel>
-                                <Input size={"lg"} type={"text"} onChange={handleInputChange} placeholder={"Name"} name="name"></Input>
+
+                                {/* <Input size={"lg"} type={"text"} defaultValue={data.data.name} onChange={handleInputChange} placeholder={"Name"} name="name"></Input> */}
+
+
                             </FormControl>
 
 
@@ -65,7 +72,9 @@ const ADD_LECTURER_FORM = () => {
                         <HStack spacing={14} mb={5}>
                             <FormControl isRequired>
                                 <FormLabel size={"lg"}>Description</FormLabel>
-                                <Input size={"lg"} type={"text"} onChange={handleInputChange} placeholder={"Description"} name="description"></Input>
+                                {/* <Input size={"lg"} type={"text"} defaultValue={data.data.description} onChange={handleInputChange} placeholder={"Description"} name="description"></Input> */}
+
+                                <DateTimePicker value={formDataPost.timeRegistrationProjectEnd}></DateTimePicker>
                             </FormControl>
                         </HStack>
                         <HStack spacing={14} mb={5}>
@@ -83,4 +92,4 @@ const ADD_LECTURER_FORM = () => {
     </>)
 
 }
-export default memo(ADD_LECTURER_FORM);
+export default memo(EDIT_TIME_FORM);

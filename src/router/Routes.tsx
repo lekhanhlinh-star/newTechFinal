@@ -7,6 +7,7 @@ import { AdminStudentsPage } from "../pages/admin/AdminStudentsPage";
 import { AdminLecturersPage } from "../pages/admin/AdminLecturerPage";
 import { AdminProjectsPage } from "../pages/admin/AdminProjectPage";
 import { AdminMajorPage } from "../pages/admin/AdminMajorPage";
+import { AdminNotificationrPage } from "../pages/admin/AdminNotiPage";
 
 
 
@@ -34,6 +35,9 @@ const Routes = () => {
         },
         {
             path: "/admin/majors/", element: <AdminMajorPage></AdminMajorPage>
+        },
+        {
+            path: "/admin/notifications/", element: <AdminNotificationrPage></AdminNotificationrPage>
         }
     ]
     const router = createBrowserRouter(routesForPublic)
