@@ -19,19 +19,8 @@ import {
 import AdminSidebarComponent from "../../components/admin/adminSidebarComponent";
 import Add_Student_FORM from "../../components/admin/students/ADD_STUDENT_FORM";
 import { STUDENT_TABLE } from "../../components/admin/students/STUDENT_TABLE";
-import { ArrowLeftIcon, ArrowRightIcon, PhoneIcon } from "@chakra-ui/icons";
-import { useEffect, useRef, useState } from "react";
-import AdminAPI from "../../api/adminAPI";
 
-import { BeatLoader } from "react-spinners";
 
-interface StudentInfo {
-    name: string,
-    email: string,
-    class: string,
-    student_id: string
-    gender: string
-}
 
 export function AdminStudentsPage() {
     const { isOpen, onOpen, onClose } = useDisclosure()

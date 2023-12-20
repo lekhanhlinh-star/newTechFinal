@@ -38,14 +38,14 @@ interface LinkItemProps {
 }
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Home', icon: FiHome, link: "/" },
-  { name: 'Teacher', icon: CgProfile, link: "/profile" },
+  { name: 'Teacher', icon: CgProfile, link: "/admin/lecturers" },
   { name: 'Student', icon: FaFacebookMessenger, link: "/admin/students" },
-  { name: 'Project', icon: FiCompass, link: "/explore" },
-  // { name: 'Favourites', icon: FiStar, link: "/" },
-  // { name: 'Logout', icon: HiOutlineLogout, link: "/" },
+  { name: 'Project', icon: FiCompass, link: "/admin/projects" },
+  { name: 'Major', icon: FiCompass, link: "/admin/majors" },
+  { name: 'Notification', icon: FiCompass, link: "/admin/notifications" },
+
+
 ]
-
-
 
 export default function AdminSidebarComponent() {
   const { isOpen, onOpen, onClose } = useDisclosure()

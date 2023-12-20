@@ -1,19 +1,19 @@
-import { Button, Flex, FormControl, FormLabel, Heading, HStack, Input, Select, Stack } from "@chakra-ui/react";
+import { Button, Flex, FormControl, FormLabel, Heading, HStack, Input, Select, Stack, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { memo, useEffect, useState } from "react";
 import { apiService } from "../../../api/AxiosClient";
 import AdminAPI from "../../../api/adminAPI";
 
 interface user_model {
-    firstName: string | null,
-    lastName: string | null,
-    email: string | null,
-    gender: string | null,
-    phone: string | null,
-    password: string | null,
-    birthday: Date | null,
+    firstName: string,
+    lastName: string,
+    email: string,
+    gender: string,
+    major: string,
+    birthday: Date,
     role: string,
-    class: string | null
+    class: string,
+    schoolYear: string
 }
 
 interface classinterface {
@@ -24,7 +24,10 @@ interface classinterface {
 }
 
 const ADD_STUDENT_FORM = () => {
+    const toast = useToast();
     const [classarr, setclassarr] = useState<classinterface[]>([])
+    const [majorarr, setmajorarr] = useState<any[]>([])
+
 
     const [formDataPost, setFormDataPost] = useState<user_model>(
         {
@@ -32,11 +35,13 @@ const ADD_STUDENT_FORM = () => {
             lastName: "",
             email: "",
             gender: "Female",
-            phone: "",
-            password: "",
+            // phone: "",
+            // password: "",
+            major: "",
             birthday: new Date(),
             role: "student",
-            class: ""
+            class: "",
+            schoolYear: ""
         }
     );
 
@@ -44,8 +49,14 @@ const ADD_STUDENT_FORM = () => {
         console.log(formDataPost)
         await AdminAPI.ManageStudent.createOne(formDataPost).then((data) => {
             console.log(data)
+            toast({
+                title: "Create successful", status: "success", duration: 9000, isClosable: true, position: "top",
+            });
         }).catch(err => {
             console.log(err)
+            toast({
+                title: err.response.data.message, status: "error", duration: 9000, isClosable: true, position: "top",
+            });
         })
     }
 
@@ -61,13 +72,30 @@ const ADD_STUDENT_FORM = () => {
     useEffect(() => {
         const fetch_data = async () => {
             await apiService.getAll("classes").then(data => {
-                setclassarr(data.data)
+                console.log(data.data)
+                setclassarr(data.data.data)
             }).catch(err => {
                 console.log(err)
             })
         }
         fetch_data()
     }, [])
+
+
+    useEffect(() => {
+        const fetch_data = async () => {
+            await apiService.getAll("majors").then(data => {
+                console.log(data.data)
+                setmajorarr(data.data.data)
+            }).catch(err => {
+                console.log(err)
+            })
+        }
+        fetch_data()
+    }, [])
+
+
+    const years = Array.from({ length: 10 }, (_, index) => 2023 - index);
 
     return (<>
         <Flex justify={"center"}>
@@ -77,7 +105,7 @@ const ADD_STUDENT_FORM = () => {
                     <Stack spacing={"20px"} fontFamily={"Oswald"}>
                         <Heading my={50} textAlign="center" >Add Student</Heading>
 
-                        <HStack spacing={8}>
+                        <HStack spacing={14} mb={5}>
 
                             <FormControl isRequired>
                                 <FormLabel>First Name</FormLabel>
@@ -88,14 +116,26 @@ const ADD_STUDENT_FORM = () => {
                                 <FormLabel>Last Name</FormLabel>
                                 <Input type={"text"} onChange={handleInputChange} placeholder={"Last Name"} name="lastName"></Input>
                             </FormControl>
-
                             <FormControl isRequired>
-                                <FormLabel>Email Address</FormLabel>
-                                <Input type={"email"} onChange={handleInputChange} placeholder={"email"} name="email"></Input>
+                                <FormLabel>Class</FormLabel>
+                                {
+                                    classarr.length !== 0 ? (<Select onChange={handleInputChange} name="class">
+                                        {
+                                            classarr.map(x =>
+                                                <option value={`${x._id}`} >{x.name}</option>
+                                            )
+                                        }
+
+                                    </Select>) :
+                                        <Input type={"text"} onChange={handleInputChange} placeholder={"class"} name="class"></Input>
+
+                                }
+
                             </FormControl>
+
                         </HStack>
 
-                        <HStack spacing={8}>
+                        <HStack spacing={14} mb={5}>
                             <FormControl isRequired>
                                 <FormLabel>Gender</FormLabel>
                                 <Select defaultValue={"Female"} onChange={handleInputChange} name="gender">
@@ -104,42 +144,50 @@ const ADD_STUDENT_FORM = () => {
                                 </Select>
                             </FormControl>
 
-                            <FormControl isRequired>
-                                <FormLabel>Class</FormLabel>
-                                <Select onChange={handleInputChange} name="class">
-                                    {
-                                        classarr.map(x =>
-                                            <option value={`${x._id}`} >{x.name}</option>
-                                        )
-                                    }
 
+
+                            <FormControl isRequired>
+                                <FormLabel>Email Address</FormLabel>
+                                <Input type={"email"} onChange={handleInputChange} placeholder={"email"} name="email"></Input>
+                            </FormControl>
+
+                            <FormControl isRequired>
+                                <FormLabel>School Year</FormLabel>
+                                <Select placeholder="Select a year" onChange={handleInputChange} name="schoolYear">
+                                    {years.map((year) => (
+                                        <option key={year} value={year}>
+                                            {year}
+                                        </option>
+                                    ))}
                                 </Select>
                             </FormControl>
 
-                            <FormControl isRequired>
-                                <FormLabel>Phone number</FormLabel>
-                                <Input type={"phone"} onChange={handleInputChange} name="phone" placeholder={"Phone number"}></Input>
-                            </FormControl>
-
 
                         </HStack>
-                        <HStack spacing={8}>
+                        <HStack spacing={14} mb={5}>
 
-
-                            <FormControl isRequired>
-                                <FormLabel>Password</FormLabel>
-                                <Input type={"password"} onChange={handleInputChange} name="password" placeholder={"Password"}></Input>
-                            </FormControl>
                             <FormControl isRequired>
                                 <FormLabel>Birth day</FormLabel>
-                                <Input type={"date"} onChange={handleInputChange} name="birthday" placeholder={"Password"}></Input>
+                                <Input type={"date"} onChange={handleInputChange} name="birthday" placeholder={"Birthday"}></Input>
                             </FormControl>
+                            <FormControl isRequired>
+                                <FormLabel>Major</FormLabel>
+                                {
+                                    majorarr.length !== 0 ? (<Select onChange={handleInputChange} name="major">
+                                        {
+                                            majorarr.map(x =>
+                                                <option value={`${x._id}`} >{x.name}</option>
+                                            )
+                                        }
 
+                                    </Select>) :
+                                        <Input type={"text"} onChange={handleInputChange} placeholder={"major"} name="major"></Input>
+
+                                }
+                            </FormControl>
 
                         </HStack>
                         <Button w={"full"} onClick={handleClick}>Add</Button>
-
-
                     </Stack>
 
                 </form>

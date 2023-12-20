@@ -27,7 +27,7 @@ import axios from "axios";
 
 export function BodyComponent() {
     return (
-        <Box minH={50} backgroundColor={"#f8f8f8"} p={2} position={"sticky"} top={0}>
+        <Box minH={50} p={2} position={"sticky"} top={0}>
             <Flex minH={600} >
                 <Box flex={1} >
                     <Box py={30} fontSize={50} alignItems={"left"} alignContent={"left"} backgroundColor={"orange"}>
