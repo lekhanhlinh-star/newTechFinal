@@ -1,4 +1,4 @@
-import ApiGenerator, { apiService } from "./AxiosClient";
+import ApiGenerator from "./AxiosClient";
 
 const endpoints = {
     students: 'users',
