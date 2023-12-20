@@ -149,7 +149,7 @@ const ApiGenerator = (apiEndpoint: string) => ({
  * @property {function(id: number): Promise} deleteOne - Deletes an entity by ID.
  */
 export const apiService = {
-    getOne, getAll, updateOne, createOne, deleteOne,updateMe,getMe
+    getOne, getAll, updateOne, createOne, deleteOne
 }
 
 export default ApiGenerator;
