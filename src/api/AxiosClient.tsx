@@ -131,12 +131,20 @@ const deleteOne = async (endpoint: string, id: string, header: object = header_d
  */
 
 
+const updateMe=async()=>{
+    return await AxiosClient.patch("users/update")
+}
+
+const getMe=async ()=>{
+    return await AxiosClient.get("users/me")
+}
+
 const ApiGenerator = (apiEndpoint: string) => ({
         getAll: (params: object) => apiService.getAll(apiEndpoint, params),
         getOne: (id: string) => apiService.getOne(apiEndpoint, id),
         createOne: (data: object) => apiService.createOne(apiEndpoint, data),
         updateOne: (id: string, data: object) => apiService.updateOne(apiEndpoint, id, data),
-        deleteOne: (id: string) => apiService.deleteOne(apiEndpoint, id)
+        deleteOne: (id: string) => apiService.deleteOne(apiEndpoint, id),
     });
 /**
  * @description Provides API service for CRUD operations
@@ -149,7 +157,7 @@ const ApiGenerator = (apiEndpoint: string) => ({
  * @property {function(id: number): Promise} deleteOne - Deletes an entity by ID.
  */
 export const apiService = {
-    getOne, getAll, updateOne, createOne, deleteOne
+    getOne, getAll, updateOne, createOne, deleteOne,updateMe,getMe
 }
 
 export default ApiGenerator;

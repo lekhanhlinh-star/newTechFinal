@@ -1,8 +1,8 @@
 import { Button, Flex, FormControl, FormLabel, Heading, HStack, Input, Select, Stack } from "@chakra-ui/react";
-import axios from "axios";
 import { memo, useEffect, useState } from "react";
-import { apiService } from "../../../api/AxiosClient";
-import AdminAPI from "../../../api/adminAPI";
+import AdminAPI from "../../api/adminAPI";
+import {apiService} from "../../api/AxiosClient";
+
 
 interface user_model {
     firstName: string | null,
@@ -23,7 +23,7 @@ interface classinterface {
     lecture: string | null,
 }
 
-const ADD_STUDENT_FORM = () => {
+const AddStudentToProject = () => {
     const [classarr, setclassarr] = useState<classinterface[]>([])
 
     const [formDataPost, setFormDataPost] = useState<user_model>(
@@ -151,4 +151,4 @@ const ADD_STUDENT_FORM = () => {
     </>)
 
 }
-export default memo(ADD_STUDENT_FORM);
+export default memo(AddStudentToProject);
