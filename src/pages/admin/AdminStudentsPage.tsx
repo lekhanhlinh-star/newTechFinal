@@ -21,7 +21,6 @@ import Add_Student_FORM from "../../components/admin/students/ADD_STUDENT_FORM";
 import { STUDENT_TABLE } from "../../components/admin/students/STUDENT_TABLE";
 
 
-
 export function AdminStudentsPage() {
     const { isOpen, onOpen, onClose } = useDisclosure()
 

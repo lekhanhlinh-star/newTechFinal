@@ -5,8 +5,8 @@ import AdminAPI from "../../../api/adminAPI";
 import DateTimePicker from "react-datetime-picker";
 
 interface major_model {
-    timeRegistrationProjectStart: Date;
-    timeRegistrationProjectEnd: Date;
+    timeRegistrationProjectStart: string;
+    timeRegistrationProjectEnd: string;
 
 }
 
@@ -14,14 +14,45 @@ const EDIT_TIME_FORM = (data: any) => {
     const toast = useToast();
     const [formDataPost, setFormDataPost] = useState<major_model>(
         {
-            timeRegistrationProjectStart: new Date(data.data.timeRegistrationProjectStart) || new Date(),
-            timeRegistrationProjectEnd: new Date(data.data.timeRegistrationProjectEnd) || new Date(),
+            timeRegistrationProjectStart: "",
+            timeRegistrationProjectEnd: "",
         }
     );
 
+    useEffect(() => {
+        const datetostring = async () => {
+            var originalDate = new Date(data.data.timeRegistrationProjectStart);
+            var convertedDate = originalDate.toLocaleString("sv-SE", {
+                timeZone: "UTC",
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+            });
+            var originalDate2 = new Date(data.data.timeRegistrationProjectEnd);
+            var convertedDate2 = originalDate2.toLocaleString("sv-SE", {
+                timeZone: "UTC",
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+            });
+            setFormDataPost({
+                timeRegistrationProjectStart: convertedDate,
+                timeRegistrationProjectEnd: convertedDate2
+            })
+        }
+        datetostring()
+    }, []
+    )
+
     const handleClick = async () => {
         console.log(formDataPost)
-        await AdminAPI.ManageMajor.updateOne(data.data._id, formDataPost).then(async (data) => {
+        const dataupdate = stringtodate()
+        console.log(dataupdate)
+        await AdminAPI.ManageMajor.updateOne(data.data._id, dataupdate).then(async (data) => {
             console.log(data)
             toast({
                 title: "Update successful",
@@ -39,6 +70,17 @@ const EDIT_TIME_FORM = (data: any) => {
         })
     }
 
+    function stringtodate() {
+        const datestart = new Date(formDataPost.timeRegistrationProjectStart);
+        const dateend = new Date(formDataPost.timeRegistrationProjectEnd);
+        return {
+            timeRegistrationProjectStart: datestart,
+            timeRegistrationProjectEnd: dateend,
+        }
+
+    }
+
+
     const handleInputChange = (event: any) => {
         const { name, value } = event.target;
         console.log(name, value)
@@ -48,38 +90,46 @@ const EDIT_TIME_FORM = (data: any) => {
     };
 
 
-
     return (<>
         <Flex justify={"center"}>
             <Stack direction={['column', 'row']}>
                 <form>
 
                     <Stack spacing={"20px"} fontFamily={"Oswald"} minW={500}>
-                        <Heading my={50} textAlign="center" >Edit Major</Heading>
+                        <Heading my={50} textAlign="center" >Edit Time Registation</Heading>
 
                         <HStack spacing={14} mb={5}>
                             <FormControl isRequired>
-                                <FormLabel size={"lg"}>Name</FormLabel>
-
-                                {/* <Input size={"lg"} type={"text"} defaultValue={data.data.name} onChange={handleInputChange} placeholder={"Name"} name="name"></Input> */}
-
-
+                                <FormLabel size={"lg"}>Start Time Registation</FormLabel>
+                                <Input
+                                    placeholder="Select Date and Time"
+                                    name="timeRegistrationProjectStart"
+                                    size="md"
+                                    type="datetime-local"
+                                    value={formDataPost.timeRegistrationProjectStart}
+                                    onChange={handleInputChange}
+                                />
                             </FormControl>
-
-
                         </HStack>
 
                         <HStack spacing={14} mb={5}>
                             <FormControl isRequired>
-                                <FormLabel size={"lg"}>Description</FormLabel>
-                                {/* <Input size={"lg"} type={"text"} defaultValue={data.data.description} onChange={handleInputChange} placeholder={"Description"} name="description"></Input> */}
+                                <FormLabel size={"lg"}>End Time Registation</FormLabel>
+                                <Input
+                                    placeholder="Select Date and Time"
+                                    name="timeRegistrationProjectEnd"
+                                    size="md"
+                                    type="datetime-local"
+                                    value={formDataPost.timeRegistrationProjectEnd}
+                                    onChange={handleInputChange}
 
-                                <DateTimePicker value={formDataPost.timeRegistrationProjectEnd}></DateTimePicker>
+                                />
                             </FormControl>
+
                         </HStack>
                         <HStack spacing={14} mb={5}>
                         </HStack>
-                        <Button w={"full"} onClick={handleClick} size={"lg"}>Add</Button>
+                        <Button w={"full"} onClick={handleClick} size={"lg"}>Update</Button>
 
 
                     </Stack>

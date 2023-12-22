@@ -5,6 +5,7 @@ import {
     Card,
     Center,
     Flex,
+    IconButton,
     Image,
     Input,
     Modal,
@@ -20,12 +21,48 @@ import {
     useToast
 } from "@chakra-ui/react";
 import { FcPanorama } from "react-icons/fc";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-
+import AdminAPI from "../../api/adminAPI";
+import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
+import { useScroll, useTransform } from "framer-motion";
+import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
+import { BeatLoader } from "react-spinners";
+interface lecturerinterface {
+    _id: string,
+    firstName: string,
+    lastName: string,
+    email: string,
+    gender: string,
+    phone: string | null,
+    birthday: Date | null,
+}
 
 
 export function AboutComponent() {
+    const [major, setmajor] = useState<lecturerinterface[]>([])
+
+    useEffect(() => {
+        const fetch_data = async () => {
+            await AdminAPI.ManageLectures.getAll({ role: "lecturer" })
+                .then((data) => {
+                    console.log(data.data.data)
+                    setmajor(data.data.data)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        }
+        fetch_data()
+    }, []
+    )
+    const targetref = useRef<HTMLDivElement | null>(null)
+    const { scrollYProgress } = useScroll({
+        target: targetref,
+    });
+
+
+    const x = useTransform(scrollYProgress, [0, 1], ["1%", "-95%"])
     return (
         <Box minH={50} p={2} position={"sticky"} top={0}>
             <Box >
@@ -45,20 +82,20 @@ export function AboutComponent() {
 
             <Flex direction={"column"} mt={50}>
                 <Text fontSize={30}>Team members</Text>
+                <Flex >
 
-                <Flex>
-                    <Flex direction={"column"} flex={1}>
-                        <Image src="https://t3.ftcdn.net/jpg/06/17/13/26/360_F_617132669_YptvM7fIuczaUbYYpMe3VTLimwZwzlWf.jpg" flex={1}></Image>
-                        <Text mt={5}>Nguyen van a</Text>
-                    </Flex>
-                    <Flex direction={"column"} flex={1}>
-                        <Image src="https://t3.ftcdn.net/jpg/06/17/13/26/360_F_617132669_YptvM7fIuczaUbYYpMe3VTLimwZwzlWf.jpg" flex={1}></Image>
-                        <Text mt={5}>Nguyen van a</Text>
-                    </Flex>
-                    <Flex direction={"column"} flex={1}>
-                        <Image src="https://t3.ftcdn.net/jpg/06/17/13/26/360_F_617132669_YptvM7fIuczaUbYYpMe3VTLimwZwzlWf.jpg" flex={1}></Image>
-                        <Text mt={5}>Nguyen van a</Text>
-                    </Flex>
+
+                    {
+                        major ? major.map(x =>
+                            <Flex direction={"column"} flex={4}>
+                                <Image src="https://t3.ftcdn.net/jpg/06/17/13/26/360_F_617132669_YptvM7fIuczaUbYYpMe3VTLimwZwzlWf.jpg" flex={1}></Image>
+
+                            </Flex>
+                        ) : null
+                    }
+
+
+
                 </Flex>
             </Flex>
 

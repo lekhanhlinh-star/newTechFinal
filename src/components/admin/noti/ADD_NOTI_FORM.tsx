@@ -67,7 +67,8 @@ const ADD_NOTI_FORM = () => {
             }).then(response => {
                 console.log(response.data);
                 toast({
-                    title: "Create new post successful", status: "success", duration: 1000, isClosable: true, position: "top", onCloseComplete: () => {
+                    title: "Create new post successful", status: "success", duration: 1000, isClosable: true, position: "top",
+                    onCloseComplete: () => {
                         window.location.reload();
                     }
                 });
