@@ -18,7 +18,7 @@ const EDIT_LECTURER_FORM = (data: any) => {
     console.log(data)
     const [formDataPost, setFormDataPost] = useState<user_model>(
         {
-            firstName: data.data.fistName || "",
+            firstName: data.data.firstName || "",
             lastName: data.data.lastName || "",
             email: data.data.email || "",
             role: "lecturer",
@@ -34,12 +34,15 @@ const EDIT_LECTURER_FORM = (data: any) => {
         await AdminAPI.ManageLectures.updateOne(data.data._id, formDataPost).then((data) => {
             console.log(data)
             toast({
-                title: "Update successful", status: "success", duration: 9000, isClosable: true, position: "top",
+                title: "Update successful", status: "success", duration: 1000, isClosable: true, position: "top",
+                onCloseComplete: () => {
+                    window.location.reload();
+                }
             });
         }).catch(err => {
             console.log(err)
             toast({
-                title: err.response.data.message, status: "error", duration: 9000, isClosable: true, position: "top",
+                title: err.response.data.message, status: "error", duration: 1000, isClosable: true, position: "top",
             });
         })
     }

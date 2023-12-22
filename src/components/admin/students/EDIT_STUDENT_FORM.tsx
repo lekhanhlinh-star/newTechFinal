@@ -1,6 +1,6 @@
 import { Button, Flex, FormControl, FormLabel, Heading, HStack, Input, Select, Stack, useToast } from "@chakra-ui/react";
 import axios from "axios";
-import { memo, useEffect, useState } from "react";
+import { JSXElementConstructor, memo, ReactElement, ReactNode, ReactPortal, useEffect, useState } from "react";
 import { apiService } from "../../../api/AxiosClient";
 import AdminAPI from "../../../api/adminAPI";
 
@@ -16,46 +16,18 @@ interface user_model {
 }
 
 const EDIT_STUDENT_FORM = (data: any) => {
-    console.log(data.data.class)
+    console.log(data.majorarr)
     const toast = useToast();
-    const [classarr, setclassarr] = useState<any[]>([])
-    const [majorarr, setmajorarr] = useState<any[]>([])
     let formattedDate = "2023-12-12"
     if (data.data.birthday) {
 
         const date = new Date(data.data.birthday);
-        const formattedDate = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+        formattedDate = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
     }
-
-
-
 
     console.log(data.data.birthday)
 
-    useEffect(() => {
-        const fetch_data = async () => {
-            await apiService.getAll("classes").then(data => {
-                // console.log(data.data)
-                setclassarr(data.data.data)
-            }).catch(err => {
-                console.log(err)
-            })
-        }
-        fetch_data()
-    }, [])
 
-
-    useEffect(() => {
-        const fetch_data = async () => {
-            await apiService.getAll("majors").then(data => {
-                // console.log(data.data)
-                setmajorarr(data.data.data)
-            }).catch(err => {
-                console.log(err)
-            })
-        }
-        fetch_data()
-    }, [])
 
 
     const [formDataPost, setFormDataPost] = useState<user_model>(
@@ -66,7 +38,7 @@ const EDIT_STUDENT_FORM = (data: any) => {
             gender: data.data.gender || "Female",
             birthday: new Date() || "",
             role: "student" || "",
-            class: data.data.class?._id || majorarr[0]._id,
+            class: data.data.class?._id || data.majorarr[0]._id,
             schoolYear: data.data.schoolYear || "",
         }
     );
@@ -87,12 +59,15 @@ const EDIT_STUDENT_FORM = (data: any) => {
         console.log(formDataPost)
         await AdminAPI.ManageStudent.updateOne(data.data._id, formDataPost).then((data) => {
             toast({
-                title: "Update successful", status: "success", duration: 9000, isClosable: true, position: "top",
+                title: "Update successful", status: "success", duration: 1000, isClosable: true, position: "top",
+                onCloseComplete: () => {
+                    window.location.reload();
+                }
             });
         }).catch(err => {
             console.log(err)
             toast({
-                title: err.response.data.message, status: "error", duration: 9000, isClosable: true, position: "top",
+                title: err.response.data.message, status: "error", duration: 1000, isClosable: true, position: "top",
             });
         })
     }
@@ -123,10 +98,10 @@ const EDIT_STUDENT_FORM = (data: any) => {
                             <FormControl isRequired>
                                 <FormLabel>Class</FormLabel>
                                 {
-                                    classarr.length !== 0 ? (
+                                    data.classarr.length !== 0 ? (
                                         <Select onChange={handleInputChange} name="class" defaultValue={data.data.class?.name}>
                                             {
-                                                classarr.map(x =>
+                                                data.classarr.map((x: { _id: any; name: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; }) =>
                                                     <option value={`${x._id}`} >{x.name}</option>
                                                 )
                                             }

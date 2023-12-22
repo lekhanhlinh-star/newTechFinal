@@ -40,6 +40,9 @@ const ADD_LECTURER_FORM = () => {
             console.log(data)
             toast({
                 title: "Create successful", status: "success", duration: 9000, isClosable: true, position: "top",
+                onCloseComplete: () => {
+                    window.location.reload();
+                }
             });
         }).catch(err => {
             console.log(err)
@@ -69,8 +72,6 @@ const ADD_LECTURER_FORM = () => {
         }
         fetch_data()
     }, [])
-
-    const years = Array.from({ length: 10 }, (_, index) => 2023 - index);
 
     return (<>
         <Flex justify={"center"}>
@@ -102,8 +103,8 @@ const ADD_LECTURER_FORM = () => {
                                 </Select>
                             </FormControl>
                             <FormControl isRequired>
-                                <FormLabel>Email Address</FormLabel>
-                                <Input type={"text"} onChange={handleInputChange} placeholder={"Last Name"} name="lastName"></Input>
+                                <FormLabel>Phone Number</FormLabel>
+                                <Input type={"number"} onChange={handleInputChange} placeholder={"Phone"} name="phone"></Input>
                             </FormControl>
                         </HStack>
                         <HStack spacing={14} mb={5}>
@@ -111,10 +112,7 @@ const ADD_LECTURER_FORM = () => {
                                 <FormLabel>Email Address</FormLabel>
                                 <Input type={"email"} onChange={handleInputChange} placeholder={"Email"} name="email"></Input>
                             </FormControl>
-                            <FormControl isRequired>
-                                <FormLabel>Phone Number</FormLabel>
-                                <Input type={"number"} onChange={handleInputChange} placeholder={"Phone"} name="phone"></Input>
-                            </FormControl>
+
                         </HStack>
 
                         <HStack spacing={14} mb={5}>

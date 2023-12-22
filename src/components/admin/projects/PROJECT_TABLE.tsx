@@ -30,27 +30,6 @@ interface projectInterface {
     updatedAt: string;
 }
 
-interface Student {
-    role: string;
-    authGoogleId: string | null;
-    authType: string;
-    _id: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    createdAt: string;
-    updatedAt: string;
-    project: string;
-    birthday: string;
-    class: {
-        _id: string;
-        name: string;
-        start_year: string;
-        __v: number;
-    };
-    gender: string;
-    schoolYear: string;
-}
 
 export function PROJECT_TABLE() {
     const [projectList, setprojectList] = useState<projectInterface[]>([])
@@ -58,7 +37,8 @@ export function PROJECT_TABLE() {
     const [loading, setLoading] = useState(false);
     const [currentproject, Setcurrentproject] = useState<projectInterface>()
     const toast = useToast();
-    const [liststudent, setliststudent] = useState<Student[]>([])
+
+    const [liststudent, setliststudent] = useState<any[]>([])
     const { isOpen: isOpen1, onOpen: onOpen1, onClose: onClose1 } = useDisclosure()
 
 
@@ -96,7 +76,6 @@ export function PROJECT_TABLE() {
     };
 
     const handleproject = async (id: string | undefined) => {
-
         const found = projectList.find((element) => element._id == id)
         console.log(found)
         if (found) {
@@ -104,6 +83,7 @@ export function PROJECT_TABLE() {
         }
         await AdminAPI.ManageStudent.getAll({ project: id }).then(data => {
             console.log(data.data.data)
+            console.log(currentproject)
             setliststudent(data.data.data)
         }).catch(err => {
             console.log(err)
@@ -144,7 +124,7 @@ export function PROJECT_TABLE() {
     )
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [overlay, setOverlay] = React.useState(<OverlayOne />)
-
+    // console.
     return (
 
         <Flex mt={50} overscroll={"scroll"}
@@ -246,7 +226,7 @@ export function PROJECT_TABLE() {
                                                     <Td>Students</Td>
                                                     <Td>
                                                         {
-                                                            liststudent.map((x: any) => (
+                                                            liststudent ? liststudent.map((x: any) => (
                                                                 <div key={x._id}>
                                                                     studentId : {x.mssv}
                                                                     <br /><br />
@@ -256,7 +236,7 @@ export function PROJECT_TABLE() {
                                                                     <br />
                                                                     <br />
                                                                 </div>
-                                                            ))
+                                                            )) : null
                                                         }
                                                     </Td>
                                                 </Tr>

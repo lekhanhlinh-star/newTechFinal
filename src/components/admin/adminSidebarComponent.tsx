@@ -49,6 +49,7 @@ const LinkItems: Array<LinkItemProps> = [
 
 export default function AdminSidebarComponent() {
   const { isOpen, onOpen, onClose } = useDisclosure()
+
   return (
     <Box minH="100vh" w={"241px"} bg={"#152259"} color={"white"}>
       <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />

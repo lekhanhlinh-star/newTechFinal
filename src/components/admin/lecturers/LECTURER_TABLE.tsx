@@ -5,6 +5,7 @@ import AdminAPI from "../../../api/adminAPI";
 import { ArrowLeftIcon, ArrowRightIcon, DeleteIcon, EditIcon, PhoneIcon } from "@chakra-ui/icons";
 import { BeatLoader } from "react-spinners";
 import EDIT_STUDENT_FORM from './EDIT_LECTURER_FORM'
+import DELETE_LECTURER from "./DELETE_LECTURER";
 // https://www.figma.com/file/KlFNRecPC4tpKx6RKMIKX5/School-Management-Admin-Dashboard-UI-(Community)?type=design&node-id=293-32589&mode=design&t=PQEmOO8MvaplyP75-0
 
 interface lecturerinterface {
@@ -28,7 +29,7 @@ export function LECTURER_TABLE() {
     useEffect(() => {
         const fetch_data = async () => {
             setLoading(true)
-            await AdminAPI.ManageLectures.getAll({ role: "lecturer", page: page, limit: 5 }).then((data) => {
+            await AdminAPI.ManageLectures.getAll({ role: "lecturer", page: page, limit: 5, active: true }).then((data) => {
                 console.log(data.data)
                 // if (data.data.data.length !== 0) {
                 setlecturerlist(data.data.data)
@@ -66,24 +67,7 @@ export function LECTURER_TABLE() {
         }
     }
 
-    const handledelete = async (id: string) => {
-        await AdminAPI.ManageStudent.deleteOne(id).then(data => {
-            console.log(data)
-            toast({
-                title: "Delete successful", status: "success", duration: 9000, isClosable: true, position: "top",
-            });
-            const found = lecturerlist.find((element) => element._id == id)
-            if (found) {
-                setlecturerlist(lecturerlist.filter(item => item !== found));
-            }
-        }
-        ).catch(err => {
-            console.log(err)
-            toast({
-                title: err, status: "error", duration: 9000, isClosable: true, position: "top",
-            });
-        })
-    }
+
 
     return (
 
@@ -176,9 +160,8 @@ export function LECTURER_TABLE() {
 
                         <Text>Major</Text>
                         <Stack direction={"row"} spacing={8} fontSize={"37px"}>
-                            <IconButton aria-label={""} onClick={() => handledelete(currentprofile._id)} icon={<DeleteIcon />}>
+                            <DELETE_LECTURER id={currentprofile._id}></DELETE_LECTURER>
 
-                            </IconButton>
                             <IconButton aria-label={""} icon={<EditIcon />} onClick={onOpen1}></IconButton>
 
                             <Modal closeOnOverlayClick={false} isOpen={isOpen1} onClose={onClose1}>
