@@ -5,6 +5,7 @@ import { apiService } from "../../../api/AxiosClient";
 import AdminAPI from "../../../api/adminAPI";
 
 interface user_model {
+    mssv: string;
     firstName: string,
     lastName: string,
     email: string,
@@ -31,6 +32,7 @@ const ADD_STUDENT_FORM = () => {
 
     const [formDataPost, setFormDataPost] = useState<user_model>(
         {
+            mssv:"",
             firstName: "",
             lastName: "",
             email: "",
@@ -119,7 +121,7 @@ const ADD_STUDENT_FORM = () => {
                             <FormControl isRequired>
                                 <FormLabel>Class</FormLabel>
                                 {
-                                    classarr.length !== 0 ? (<Select onChange={handleInputChange} name="class">
+                                    classarr.length !== 0 ? (<Select onChange={handleInputChange} placeholder={"class"}  name="class">
                                         {
                                             classarr.map(x =>
                                                 <option value={`${x._id}`} >{x.name}</option>
@@ -173,7 +175,7 @@ const ADD_STUDENT_FORM = () => {
                             <FormControl isRequired>
                                 <FormLabel>Major</FormLabel>
                                 {
-                                    majorarr.length !== 0 ? (<Select onChange={handleInputChange} name="major">
+                                    majorarr.length !== 0 ? (<Select onChange={handleInputChange} name="major" placeholder={"major"}>
                                         {
                                             majorarr.map(x =>
                                                 <option value={`${x._id}`} >{x.name}</option>
