@@ -20,7 +20,7 @@ import {
     useToast
 } from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
-import {apiService} from "../../api/AxiosClient";
+import {apiService} from "../../../api/AxiosClient";
 import {useCookies} from "react-cookie";
 
 

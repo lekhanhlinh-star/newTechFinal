@@ -1,6 +1,6 @@
 import {Flex, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
-import {apiService} from "../../api/AxiosClient";
+import {apiService} from "../../../api/AxiosClient";
 import {useNavigate} from "react-router-dom";
 import {useCookies} from "react-cookie";
 
@@ -96,7 +96,7 @@ export function ProjectTable() {
 
                             cursor="pointer"
                             onClick={() => {
-                                navigate(`/lecturers/${project._id}`)
+                                navigate(`/lecturers/projects/${project._id}`)
 
                             }}
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 import queryString from "query-string";
-import {useCookies} from "react-cookie";
+import {useCookies,Cookies} from "react-cookie";
 
 
 /**
@@ -9,8 +9,10 @@ import {useCookies} from "react-cookie";
  * @type {Object}
  * @property {string} 'Content-Type' - The value for the 'Content-Type' header field.
  */
+const jwt=Cookies;
+console.log(jwt)
 const header_default = {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
 }
 /**
  * AxiosClient is an instance of Axios used to make HTTP requests.
@@ -99,6 +101,7 @@ const updateOne = async (endpoint: string, id: string, data: object, headers: ob
  * @returns {Promise} - A promise that resolves to the response of the request.
  */
 const createOne = async (endpoint: string, data: object, header: object = header_default) => {
+    console.log("headers",header)
     return await AxiosClient.post(endpoint, data, {
         headers: header
     })
@@ -136,7 +139,7 @@ const deleteOne = async (endpoint: string, id: string, header: object = header_d
 const ApiGenerator = (apiEndpoint: string) => ({
     getAll: (params: object) => apiService.getAll(apiEndpoint, params),
     getOne: (id: string) => apiService.getOne(apiEndpoint, id),
-    createOne: (data: object) => apiService.createOne(apiEndpoint, data),
+    createOne: (data: object,headers:object=header_default) => apiService.createOne(apiEndpoint, data,headers),
     updateOne: (_id: string, data: object) => apiService.updateOne(apiEndpoint, _id, data),
     deleteOne: (id: string) => apiService.deleteOne(apiEndpoint, id)
 });

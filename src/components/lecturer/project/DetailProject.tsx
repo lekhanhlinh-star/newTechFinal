@@ -1,6 +1,6 @@
 import {useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
-import {apiService} from "../../api/AxiosClient";
+import {apiService} from "../../../api/AxiosClient";
 import {
     Box,
     Button,
@@ -8,24 +8,28 @@ import {
     Heading,
     HStack,
     Icon,
-    ListItem,
     Modal,
     ModalBody,
     ModalContent,
     ModalFooter,
     ModalHeader,
     ModalOverlay,
-    OrderedList,
     Spacer,
     Stack,
+    Tag,
+    TagRightIcon,
     Text,
     useDisclosure,
     useToast
 } from "@chakra-ui/react";
+import {FcAbout, FcAdvertising, FcCalendar, FcCheckmark, FcDocument, FcOpenedFolder} from "react-icons/fc";
 import {useCookies} from "react-cookie";
 import {ChevronLeftIcon} from "@chakra-ui/icons";
-import {FcAbout, FcCalendar, FcDocument, FcOpenedFolder} from "react-icons/fc";
 import {Update_Project} from "./Update_Project";
+import {ADD_TASK} from "../task/ADD_TASK";
+import {RiDeleteBin6Line} from "react-icons/ri";
+import {EDIT_TASK} from "../task/EDIT_TASK";
+import {REVIEW_TASK} from "../task/REVIEW_TASK";
 
 interface Project {
     _id: string;
@@ -53,9 +57,13 @@ export function DetailProject() {
     const params = useParams()
     const id = params["id"]
     const [projectData, setProjectData] = useState<Project>();
-    const navigate=useNavigate();
+    const navigate = useNavigate();
     const [cookies] = useCookies();
     const token = cookies.jwt;
+    const headers = {
+        'Content-Type': 'application/json', 'authorization': 'Bearer ' + token
+    }
+    const [TaskList, setTaskList] = useState<any[]>([]);
     const {isOpen, onOpen, onClose} = useDisclosure()
     useEffect(() => {
         const fetch_data = async () => {
@@ -71,7 +79,39 @@ export function DetailProject() {
         fetch_data()
 
     }, []);
+    useEffect(() => {
+        const fetch_data = async () => {
+            const params = {
+                project: id
+            }
+
+            await apiService.getAll("/tasks", params, headers)
+                .then(response => {
+
+                    const data = response.data.data
+                    setTaskList(data)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        }
+        fetch_data()
+    }, []);
     const toast = useToast();
+    const handleDelete = async (id:string) => {
+        await apiService.deleteOne("/tasks", id,headers)
+            .then(response => {
+                 toast({
+                    title: 'Delete successful', status: 'success', duration: 1000, isClosable: true, position: 'top',onCloseComplete:()=>{
+                        window.location.reload();
+                    }
+                })
+            }).catch(error => {
+                 toast({
+                    title: 'Delete task error', status: 'error', duration: 1000, isClosable: true, position: 'top'
+                })
+               })
+    }
     return (<>
 
         <Box>
@@ -169,11 +209,15 @@ export function DetailProject() {
                                         <Button colorScheme='blue' mr={3} onClick={async () => {
                                             await apiService.deleteOne("projects", id as string).then(response => {
                                                 toast({
-                                                    title: 'Delete project successful', status: 'success', duration: 1000, isClosable: true, position: 'top',onCloseComplete:()=>{
+                                                    title: 'Delete project successful',
+                                                    status: 'success',
+                                                    duration: 1000,
+                                                    isClosable: true,
+                                                    position: 'top',
+                                                    onCloseComplete: () => {
                                                         navigate("/lecturers")
                                                     }
                                                 })
-
 
                                             })
                                             onClose()
@@ -196,23 +240,63 @@ export function DetailProject() {
                 </Stack>
 
                 <Stack>
-                    <Stack>
+                    <Stack mb={100}>
                         <Flex>
                             <Spacer/>
                             <Heading>
                                 Tasks
+
                             </Heading>
+
                             <Spacer/>
+
+                            <Flex>
+                                <ADD_TASK></ADD_TASK>
+                            </Flex>
                         </Flex>
+
+                    </Stack>
+                    <Stack direction={"column"} spacing={"100px"}>
+
+                        {TaskList.map(x =>
+
+                            <Stack>
+                                <Flex>
+                                    <Icon as={FcCalendar} fontSize={"30px"}></Icon>
+                                    <Text as={"b"}>From </Text>
+                                    <Text mx={10}>{new Date(x.startDate.toString()).toDateString()}</Text>
+                                    <Text as={"b"}>To</Text>
+                                    <Text mx={10}>{new Date(x.endDate.toString()).toDateString()}</Text>
+                                    <Tag textTransform={"uppercase"}
+                                         colorScheme={x.status === "assigned" ? "red" : x.status === "process" ? "blue":"yellow"}> {x.status}
+
+                                        {x.status === "assigned" ? <TagRightIcon as={FcAdvertising } />  : x.status === "process" ? <TagRightIcon as={FcCheckmark} /> : "yellow"}
+
+                                    </Tag>
+
+                                    <Spacer></Spacer>
+                                    <EDIT_TASK id={x._id}></EDIT_TASK>
+
+                                    <Button leftIcon={<RiDeleteBin6Line />} onClick={()=>{
+                                        handleDelete(x._id)
+                                    }}>Delete</Button>
+
+                                </Flex>
+                                <Flex>
+
+                                    <Text>{x.task}</Text>
+                                </Flex>
+                                <Stack direction={"row"}>
+                                   <REVIEW_TASK id={x._id}></REVIEW_TASK>
+
+                                </Stack>
+
+
+                            </Stack>)}
+
                     </Stack>
 
 
-                    <OrderedList>
-                        <ListItem>Lorem ipsum dolor sit amet</ListItem>
-                        <ListItem>Consectetur adipiscing elit</ListItem>
-                        <ListItem>Integer molestie lorem at massa</ListItem>
-                        <ListItem>Facilisis in pretium nisl aliquet</ListItem>
-                    </OrderedList>
                 </Stack>
             </Stack>
 

@@ -3,6 +3,7 @@ import axios from "axios";
 import { memo, useEffect, useState } from "react";
 import { apiService } from "../../../api/AxiosClient";
 import AdminAPI from "../../../api/adminAPI";
+import {useCookies} from "react-cookie";
 
 interface user_model {
     firstName: string,
@@ -21,6 +22,9 @@ interface classinterface {
 }
 
 const ADD_LECTURER_FORM = () => {
+    const [cookies] = useCookies();
+    const token = cookies.jwt;
+    console.log(token)
     const toast = useToast();
     const [classarr, setclassarr] = useState<classinterface[]>([])
     const [formDataPost, setFormDataPost] = useState<user_model>(
@@ -33,10 +37,12 @@ const ADD_LECTURER_FORM = () => {
             gender: "Female"
         }
     );
-
+const headers = {
+        'Content-Type': 'application/json', 'authorization': 'Bearer ' + token
+    }
     const handleClick = async () => {
-        console.log(formDataPost)
-        await AdminAPI.ManageStudent.createOne(formDataPost).then((data) => {
+
+        await AdminAPI.ManageStudent.createOne(formDataPost, headers).then((data) => {
             console.log(data)
             toast({
                 title: "Create successful", status: "success", duration: 9000, isClosable: true, position: "top",

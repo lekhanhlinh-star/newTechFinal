@@ -1,8 +1,8 @@
 import { Box, Button, Container, Flex, Input, Stack } from "@chakra-ui/react";
 import Sidebar from "../../components/lecturer/Sidebar";
-import { ProjectTable } from "../../components/lecturer/ProjectTable";
+import { ProjectTable } from "../../components/lecturer/project/ProjectTable";
 import { STUDENT_TABLE } from "../../components/admin/students/STUDENT_TABLE";
-import { Project_FORM } from "../../components/lecturer/Project_FORM";
+import { Project_FORM } from "../../components/lecturer/project/Project_FORM";
 
 export function LecturerPage() {
     return (<>

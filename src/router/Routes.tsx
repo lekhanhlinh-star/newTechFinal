@@ -4,7 +4,7 @@ import {AdminPage} from "../pages/admin/AdminPage";
 import Home_page from "../pages/home";
 import { AdminStudentsPage } from "../pages/admin/AdminStudentsPage";
 import { LecturerPage } from "../pages/lecture/LecturerPage";
-import { DetailProject } from "../components/lecturer/DetailProject";
+import { DetailProject } from "../components/lecturer/project/DetailProject";
 import { AdminLecturersPage } from "../pages/admin/AdminLecturerPage";
 import { AdminProjectsPage } from "../pages/admin/AdminProjectPage";
 import { AdminMajorPage } from "../pages/admin/AdminMajorPage";
@@ -22,10 +22,10 @@ const Routes = () => {
         path: "/login", element: <Login_page/>
         },
         {
-        path: "/lecturers/", element: <LecturerPage></LecturerPage>
+        path: "/lecturers/projects/", element: <LecturerPage></LecturerPage>
         }
         ,{
-        path: "/lecturers/:id", element: <DetailProject></DetailProject>
+        path: "/lecturers/projects/:id", element: <DetailProject></DetailProject>
         }]
     const routesForAdmin = [{
         path: "/admin", element: <ProtectedAdminRoute/>, children: [{

@@ -14,7 +14,7 @@ import {
     useDisclosure
 } from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
-import {apiService} from "../../api/AxiosClient";
+import {apiService} from "../../../api/AxiosClient";
 import {useParams} from "react-router-dom";
 import {useCookies} from "react-cookie";
 
@@ -89,7 +89,7 @@ export function Update_Project() {
         <Button size={"lg"} onClick={onOpen} minW={"200px"} colorScheme={"red"}>Edit</Button>
 
 
-        <Modal isOpen={isOpen} size={"full"} onClose={onClose}>
+        <Modal isOpen={isOpen} size={"lg"} onClose={onClose}>
             <ModalOverlay/>
             <ModalContent>
                 <ModalHeader>Edit information project</ModalHeader>
