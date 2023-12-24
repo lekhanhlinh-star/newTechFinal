@@ -3,6 +3,7 @@ import axios from "axios";
 import { memo, useEffect, useState } from "react";
 import { apiService } from "../../../api/AxiosClient";
 import AdminAPI from "../../../api/adminAPI";
+import { useCookies } from "react-cookie";
 
 interface user_model {
     mssv: string;
@@ -15,6 +16,7 @@ interface user_model {
     role: string,
     class: string,
     schoolYear: string
+    phone: string
 }
 
 interface classinterface {
@@ -28,16 +30,17 @@ const ADD_STUDENT_FORM = () => {
     const toast = useToast();
     const [classarr, setclassarr] = useState<classinterface[]>([])
     const [majorarr, setmajorarr] = useState<any[]>([])
-
+    const [cookies] = useCookies();
+    const token = cookies.jwt;
 
     const [formDataPost, setFormDataPost] = useState<user_model>(
         {
-            mssv:"",
+            mssv: "",
             firstName: "",
             lastName: "",
             email: "",
             gender: "Female",
-            // phone: "",
+            phone: "",
             // password: "",
             major: "",
             birthday: new Date(),
@@ -49,7 +52,10 @@ const ADD_STUDENT_FORM = () => {
 
     const handleClick = async () => {
         console.log(formDataPost)
-        await AdminAPI.ManageStudent.createOne(formDataPost).then((data) => {
+
+        await AdminAPI.ManageStudent.createOne(formDataPost, {
+            'Content-Type': 'application/json', 'authorization': 'Bearer ' + token
+        }).then((data) => {
             console.log(data)
             toast({
                 title: "Create successful", status: "success", duration: 1000, isClosable: true, position: "top",
@@ -124,7 +130,7 @@ const ADD_STUDENT_FORM = () => {
                             <FormControl isRequired>
                                 <FormLabel>Class</FormLabel>
                                 {
-                                    classarr.length !== 0 ? (<Select onChange={handleInputChange} placeholder={"class"}  name="class">
+                                    classarr.length !== 0 ? (<Select onChange={handleInputChange} placeholder={"class"} name="class">
                                         {
                                             classarr.map(x =>
                                                 <option value={`${x._id}`} >{x.name}</option>
@@ -170,6 +176,10 @@ const ADD_STUDENT_FORM = () => {
 
                         </HStack>
                         <HStack spacing={14} mb={5}>
+                            <FormControl isRequired>
+                                <FormLabel>Phone</FormLabel>
+                                <Input type={"number"} onChange={handleInputChange} placeholder={"phone"} name="phone"></Input>
+                            </FormControl>
 
                             <FormControl isRequired>
                                 <FormLabel>Birth day</FormLabel>

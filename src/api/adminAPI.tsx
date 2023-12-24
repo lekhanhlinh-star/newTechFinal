@@ -1,3 +1,4 @@
+import { useCookies } from "react-cookie";
 import ApiGenerator from "./AxiosClient";
 
 const endpoints = {

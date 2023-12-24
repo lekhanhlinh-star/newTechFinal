@@ -1,6 +1,6 @@
 import axios from "axios";
 import queryString from "query-string";
-import {useCookies} from "react-cookie";
+import { useCookies } from "react-cookie";
 
 
 /**
@@ -56,7 +56,6 @@ const getOne = async (endpoint: string, id: string, headers: object = header_def
     return await AxiosClient.get(`${endpoint}/${id}`, {
         headers: headers
     })
-
 }
 /**
  * Retrieves data from the specified endpoint using GET method.
@@ -66,6 +65,7 @@ const getOne = async (endpoint: string, id: string, headers: object = header_def
  * @param {object} headers - The optional headers to include in the request.
  * @returns {Promise} A Promise that resolves to the response data.
  */
+
 const getAll = async (endpoint: string, params: object = {}, headers: object = header_default) => {
 
     return await AxiosClient.get(endpoint, {
@@ -133,10 +133,10 @@ const deleteOne = async (endpoint: string, id: string, header: object = header_d
  */
 
 
-const ApiGenerator = (apiEndpoint: string) => ({
+const ApiGenerator = (apiEndpoint: string,) => ({
     getAll: (params: object) => apiService.getAll(apiEndpoint, params),
     getOne: (id: string) => apiService.getOne(apiEndpoint, id),
-    createOne: (data: object) => apiService.createOne(apiEndpoint, data),
+    createOne: (data: object, header: Object = header_default) => apiService.createOne(apiEndpoint, data, header),
     updateOne: (_id: string, data: object) => apiService.updateOne(apiEndpoint, _id, data),
     deleteOne: (id: string) => apiService.deleteOne(apiEndpoint, id)
 });
