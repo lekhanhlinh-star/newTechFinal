@@ -21,6 +21,7 @@ import {
 } from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import {apiService} from "../../api/AxiosClient";
+import {useCookies} from "react-cookie";
 
 
 interface Project {
@@ -42,14 +43,15 @@ interface Major {
 }
 
 export function Project_FORM() {
+    const [cookies] = useCookies();
+    const token = cookies.jwt;
     const toast = useToast()
+    const headers = {
+        'Content-Type': 'application/json', 'authorization': 'Bearer ' + token
+    }
     const [majorList, setMajorList] = useState<Major[]>([]);
 
-    const id_lecturer = "65798ccc4899d53f90551575"
-    const [projectInfo, setProjectInfo] = useState<Project | object>({
-        lecturer: id_lecturer
-
-    });
+    const [projectInfo, setProjectInfo] = useState<Project | object>({});
     useEffect(() => {
 
         const fetch = async () => {
@@ -78,25 +80,17 @@ export function Project_FORM() {
     const handleSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
         try {
             event.preventDefault();
-            await apiService.createOne("projects", projectInfo).then(response => {
+            await apiService.createOne("projects/projectByLecturer", projectInfo, headers).then(response => {
 
 
                 toast({
-                    title: 'Create a new project successful',
-                    status: 'success',
-                    duration: 9000,
-                    isClosable: true,
-                    position: 'top',
+                    title: 'Create a new project successful', status: 'success', duration: 9000, isClosable: true, position: 'top',
                 })
 
 
             }).catch(e => {
                 toast({
-                    title: 'Create a new project fail',
-                    status: 'error',
-                    duration: 9000,
-                    isClosable: true,
-                    position: 'top',
+                    title: 'Create a new project fail', status: 'error', duration: 9000, isClosable: true, position: 'top',
                 })
             })
 
@@ -109,108 +103,108 @@ export function Project_FORM() {
     const {isOpen, onOpen, onClose} = useDisclosure()
 
     return (<>
-    <Button bg={"#2671B1"} color={"white"} h={"41px"} maxW={"235px"} onClick={onOpen}>Add
-        Project</Button>
-    <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay/>
-        <ModalContent minWidth={"900px"} minH={"600px"}>
-            {/*<ModalHeader>Create your account</ModalHeader>*/}
-            <ModalCloseButton/>
-            <ModalBody minWidth={"900px"} pb={6}>
+        <Button bg={"#2671B1"} color={"white"} h={"41px"} maxW={"235px"} onClick={onOpen}>Add
+            Project</Button>
+        <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay/>
+            <ModalContent minWidth={"900px"} minH={"600px"}>
+                {/*<ModalHeader>Create your account</ModalHeader>*/}
+                <ModalCloseButton/>
+                <ModalBody minWidth={"900px"} pb={6}>
 
 
-                <Flex justify={"center"}>
-                    <Stack direction={['column', 'row']}>
-                        <form onSubmit={handleSubmitForm}>
+                    <Flex justify={"center"}>
+                        <Stack direction={['column', 'row']}>
+                            <form onSubmit={handleSubmitForm}>
 
-                            <Stack spacing={"20px"} fontFamily={"Oswald"}>
-                                <Heading mt={50} textAlign="center">Create a new project</Heading>
-                                <Flex>
-                                    <Spacer></Spacer>
-                                    <Avatar h={"70px"} w={"70px"} src={"projectIcon.png"}></Avatar>
-                                    <Spacer></Spacer>
-                                </Flex>
-
-
-                                <HStack spacing={8}>
-
-                                    <FormControl isRequired>
-                                        <FormLabel>Name</FormLabel>
-                                        <Input minW={"600px"} type={"text"} onChange={handleInputChange}
-                                               placeholder={"Name"} name="name"></Input>
-                                    </FormControl>
+                                <Stack spacing={"20px"} fontFamily={"Oswald"}>
+                                    <Heading mt={50} textAlign="center">Create a new project</Heading>
+                                    <Flex>
+                                        <Spacer></Spacer>
+                                        <Avatar h={"70px"} w={"70px"} src={"projectIcon.png"}></Avatar>
+                                        <Spacer></Spacer>
+                                    </Flex>
 
 
-                                </HStack>
-                                <HStack spacing={8}>
+                                    <HStack spacing={8}>
+
+                                        <FormControl isRequired>
+                                            <FormLabel>Name</FormLabel>
+                                            <Input minW={"600px"} type={"text"} onChange={handleInputChange}
+                                                   placeholder={"Name"} name="name"></Input>
+                                        </FormControl>
 
 
-                                    <FormControl isRequired>
-                                        <FormLabel>School year</FormLabel>
-                                        <Input type={"text"} onChange={handleInputChange}
-                                               placeholder={"School year"} name="schoolYear"></Input>
-                                    </FormControl>
-                                    <FormControl isRequired>
-                                        <FormLabel>Major</FormLabel>
-                                        <Select placeholder='Select major'  onChange={handleInputChange}
-                                                name="major">
+                                    </HStack>
+                                    <HStack spacing={8}>
 
 
-                                        {majorList.map((major) => <option
-                                            value={major._id}>{major.name}</option>)}
+                                        <FormControl isRequired>
+                                            <FormLabel>School year</FormLabel>
+                                            <Input type={"text"} onChange={handleInputChange}
+                                                   placeholder={"School year"} name="schoolYear"></Input>
+                                        </FormControl>
+                                        <FormControl isRequired>
+                                            <FormLabel>Major</FormLabel>
+                                            <Select placeholder='Select major' onChange={handleInputChange}
+                                                    name="major">
 
 
-                                    </Select>
-                                </FormControl>
-
-                            </HStack>
+                                                {majorList.map((major) => <option
+                                                    value={major._id}>{major.name}</option>)}
 
 
-                            <HStack spacing={8}>
+                                            </Select>
+                                        </FormControl>
+
+                                    </HStack>
 
 
-                                <FormControl isRequired>
-                                    <FormLabel>Start Date</FormLabel>
-                                    <Input type={"date"} onChange={handleInputChange} name="startDate"
-                                           placeholder={"Start Date"}></Input>
-                                </FormControl>
-                                <FormControl isRequired>
-                                    <FormLabel>End Date</FormLabel>
-                                    <Input type={"date"} onChange={handleInputChange} name="endDate"
-                                           placeholder={"End Date"}></Input>
-                                </FormControl>
+                                    <HStack spacing={8}>
 
 
-                            </HStack>
-                            <HStack spacing={8}>
+                                        <FormControl isRequired>
+                                            <FormLabel>Start Date</FormLabel>
+                                            <Input type={"date"} onChange={handleInputChange} name="startDate"
+                                                   placeholder={"Start Date"}></Input>
+                                        </FormControl>
+                                        <FormControl isRequired>
+                                            <FormLabel>End Date</FormLabel>
+                                            <Input type={"date"} onChange={handleInputChange} name="endDate"
+                                                   placeholder={"End Date"}></Input>
+                                        </FormControl>
 
 
-                                <FormControl isRequired>
-                                    <FormLabel>Description</FormLabel>
-                                    <Textarea onChange={handleInputChange} name={"description"}
-                                              placeholder='Here is the description'/>
-                                </FormControl>
+                                    </HStack>
+                                    <HStack spacing={8}>
 
 
-                            </HStack>
-                            <Button border='2px'
-                                    borderColor='green.500' type={"submit"} colorScheme={"red"}
-                                    w={"full"}>Add</Button>
+                                        <FormControl isRequired>
+                                            <FormLabel>Description</FormLabel>
+                                            <Textarea onChange={handleInputChange} name={"description"}
+                                                      placeholder='Here is the description'/>
+                                        </FormControl>
 
 
-                    </Stack>
-
-                </form>
-
-            </Stack>
-        </Flex>
-
-    </ModalBody>
-
-    </ModalContent>
-</Modal>
+                                    </HStack>
+                                    <Button border='2px'
+                                            borderColor='green.500' type={"submit"} colorScheme={"red"}
+                                            w={"full"}>Add</Button>
 
 
-</>)
+                                </Stack>
+
+                            </form>
+
+                        </Stack>
+                    </Flex>
+
+                </ModalBody>
+
+            </ModalContent>
+        </Modal>
+
+
+    </>)
 
 }

@@ -9,16 +9,23 @@ import {AdminProjectsPage} from "../pages/admin/AdminProjectPage";
 import {AdminMajorPage} from "../pages/admin/AdminMajorPage";
 import {AdminNotificationrPage} from "../pages/admin/AdminNotiPage";
 import {ProtectedAdminRoute} from "../components/auth/ProtectedAdminRoute";
+import {DetailProject} from "../components/lecturer/DetailProject";
 
 
 const Routes = () => {
-    const routesForPublic = [{
+    const routesForPublic = [
+        {
         path: "/", element: <Home_page/>
-    }, {
+        },
+        {
         path: "/login", element: <Login_page/>
-    }, {
+        },
+        {
         path: "/lecturers/", element: <LecturerPage></LecturerPage>
-    }]
+        }
+        ,{
+        path: "/lecturers/:id", element: <DetailProject></DetailProject>
+        }]
     const routesForAdmin = [{
         path: "/admin", element: <ProtectedAdminRoute/>, children: [{
             path: "/admin/students/", element: <AdminStudentsPage></AdminStudentsPage>,

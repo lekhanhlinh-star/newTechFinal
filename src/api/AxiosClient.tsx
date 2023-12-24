@@ -1,5 +1,6 @@
 import axios from "axios";
 import queryString from "query-string";
+import {useCookies} from "react-cookie";
 
 
 /**
@@ -24,6 +25,7 @@ const header_default = {
  *     console.error(error);
  *   });
  */
+
 export const AxiosClient = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL_SERVER || "http://localhost:5000/api/v1", headers: {
         'Content-Type': 'application/json'
