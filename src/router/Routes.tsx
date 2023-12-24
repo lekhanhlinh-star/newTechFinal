@@ -2,14 +2,14 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Login_page from "../pages/LoginPage";
 import {AdminPage} from "../pages/admin/AdminPage";
 import Home_page from "../pages/home";
-import {AdminStudentsPage} from "../pages/admin/AdminStudentsPage";
-import {LecturerPage} from "../pages/lecture/LecturerPage";
-import {AdminLecturersPage} from "../pages/admin/AdminLecturerPage";
-import {AdminProjectsPage} from "../pages/admin/AdminProjectPage";
-import {AdminMajorPage} from "../pages/admin/AdminMajorPage";
-import {AdminNotificationrPage} from "../pages/admin/AdminNotiPage";
-import {ProtectedAdminRoute} from "../components/auth/ProtectedAdminRoute";
-import {DetailProject} from "../components/lecturer/DetailProject";
+import { AdminStudentsPage } from "../pages/admin/AdminStudentsPage";
+import { LecturerPage } from "../pages/lecture/LecturerPage";
+import { DetailProject } from "../components/lecturer/DetailProject";
+import { AdminLecturersPage } from "../pages/admin/AdminLecturerPage";
+import { AdminProjectsPage } from "../pages/admin/AdminProjectPage";
+import { AdminMajorPage } from "../pages/admin/AdminMajorPage";
+import { AdminNotificationrPage } from "../pages/admin/AdminNotiPage";
+
 
 
 const Routes = () => {

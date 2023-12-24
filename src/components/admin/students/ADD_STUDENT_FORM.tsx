@@ -52,7 +52,10 @@ const ADD_STUDENT_FORM = () => {
         await AdminAPI.ManageStudent.createOne(formDataPost).then((data) => {
             console.log(data)
             toast({
-                title: "Create successful", status: "success", duration: 9000, isClosable: true, position: "top",
+                title: "Create successful", status: "success", duration: 1000, isClosable: true, position: "top",
+                onCloseComplete: () => {
+                    window.location.reload();
+                }
             });
         }).catch(err => {
             console.log(err)

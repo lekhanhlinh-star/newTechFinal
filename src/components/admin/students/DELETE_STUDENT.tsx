@@ -16,14 +16,14 @@ import { DeleteIcon } from '@chakra-ui/icons';
 import AdminAPI from '../../../api/adminAPI';
 
 
-const DELETE_NOTI = ({ id }: { id: string }) => {
+const DELETE_STUDENT = ({ id }: { id: string }) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const cancelRef = useRef<HTMLButtonElement>(null);
     const toast = useToast();
 
     const handledelete = async (id: string) => {
         console.log(id)
-        await AdminAPI.ManageNoti.deleteOne(id).then(data => {
+        await AdminAPI.ManageStudent.deleteOne(id).then(data => {
             console.log(data)
             toast({
                 title: "Delete successful",
@@ -48,7 +48,9 @@ const DELETE_NOTI = ({ id }: { id: string }) => {
 
     return (
         <>
-            <IconButton aria-label={""} icon={<DeleteIcon />} size={"md"} mr={5} onClick={onOpen}></IconButton>
+            {/* <IconButton aria-label={""} icon={<DeleteIcon />} size={"md"} mr={5} onClick={onOpen}></IconButton> */}
+            <IconButton aria-label={""} onClick={onOpen} icon={<DeleteIcon />}>
+            </IconButton>
             <AlertDialog
                 isOpen={isOpen}
                 leastDestructiveRef={cancelRef}
@@ -78,4 +80,4 @@ const DELETE_NOTI = ({ id }: { id: string }) => {
     )
 }
 
-export default memo(DELETE_NOTI);
+export default memo(DELETE_STUDENT);

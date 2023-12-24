@@ -21,7 +21,6 @@ import Add_Student_FORM from "../../components/admin/students/ADD_STUDENT_FORM";
 import { STUDENT_TABLE } from "../../components/admin/students/STUDENT_TABLE";
 
 
-
 export function AdminStudentsPage() {
     const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -32,8 +31,6 @@ export function AdminStudentsPage() {
             <Stack flex={2} ml={20} mt={20} direction={"column"}>
                 <Button bg={"#2671B1"} color={"white"} h={"41px"} maxW={"235px"} onClick={onOpen}>Add
                     students</Button>
-                <Input minW={"777px"} h={"49px"} borderRadius={"8px"} bg={"#E0E0E0"} color={"gray.200"}
-                    placeholder={"Search for a student by name or email"}></Input>
 
                 <STUDENT_TABLE></STUDENT_TABLE>
 

@@ -9,33 +9,14 @@ import EDIT_PROJECT_FORM from "./EDIT_PROJECT_FORM";
 import React from "react";
 // import EDIT_STUDENT_FORM from './EDIT_PROJECT_FORM'
 // https://www.figma.com/file/KlFNRecPC4tpKx6RKMIKX5/School-Management-Admin-Dashboard-UI-(Community)?type=design&node-id=293-32589&mode=design&t=PQEmOO8MvaplyP75-0
-
-interface projectInterface {
-    status: string;
-    review: string;
-    score: number;
-    _id: string;
-    name: string;
-    description: string;
-    schoolYear: string;
-    major: {
-        _id: string;
-        name: string;
-        description: string;
-    };
-    report: any[];
-    lecturer: string | null;
-
-    createdAt: string;
-    updatedAt: string;
-}
-
 interface Student {
     role: string;
     authGoogleId: string | null;
     authType: string;
+    gender: string;
     _id: string;
     email: string;
+    mssv: string | null;
     firstName: string;
     lastName: string;
     createdAt: string;
@@ -48,16 +29,43 @@ interface Student {
         start_year: string;
         __v: number;
     };
-    gender: string;
     schoolYear: string;
+}
+interface Major {
+    _id: string;
+    name: string;
+    description: string;
+    timeRegistrationProjectStart: string;
+    timeRegistrationProjectEnd: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+}
+
+interface ProjectInterface {
+    status: string;
+    review: string;
+    score: number;
+    _id: string;
+    name: string;
+    description: string;
+    lecturer: string | null;
+    schoolYear: string;
+    major: Major | null;
+    report: any[]; // You can replace `any` with the appropriate type for the `report` array
+    createdAt: string;
+    updatedAt: string;
+    startDate: string;
+    endDate: string;
 }
 
 export function PROJECT_TABLE() {
-    const [projectList, setprojectList] = useState<projectInterface[]>([])
+    const [projectList, setprojectList] = useState<ProjectInterface[]>([])
     const [page, setpage] = useState(1)
     const [loading, setLoading] = useState(false);
-    const [currentproject, Setcurrentproject] = useState<projectInterface>()
+    const [currentproject, Setcurrentproject] = useState<ProjectInterface>()
     const toast = useToast();
+
     const [liststudent, setliststudent] = useState<Student[]>([])
     const { isOpen: isOpen1, onOpen: onOpen1, onClose: onClose1 } = useDisclosure()
 
@@ -95,16 +103,19 @@ export function PROJECT_TABLE() {
         setpage((prevState) => Math.max(1, prevState - 1)); // Make sure page doesn't go below 1
     };
 
-    const handleproject = async (id: string | undefined) => {
-
+    const handleproject = async (id: string) => {
         const found = projectList.find((element) => element._id == id)
         console.log(found)
         if (found) {
             Setcurrentproject(found)
         }
         await AdminAPI.ManageStudent.getAll({ project: id }).then(data => {
-            console.log(data.data.data)
-            setliststudent(data.data.data)
+            try {
+                setliststudent(data.data.data)
+            }
+            catch (er) {
+                console.log(er)
+            }
         }).catch(err => {
             console.log(err)
         })
@@ -180,11 +191,11 @@ export function PROJECT_TABLE() {
                                                 <Avatar
                                                     src={""}>
                                                 </Avatar>
-                                                <Text ml={5}>{`${x.name}`}</Text>
+                                                <Text ml={5}>{`${x?.name}`}</Text>
                                             </Flex>
                                         </Td>
                                         <Td> {x.schoolYear}</Td>
-                                        <Td> {x.major.name}</Td>
+                                        <Td> {x.major?.name}</Td>
                                         <Td>{x.status}</Td>
 
                                     </Tr>
@@ -233,9 +244,12 @@ export function PROJECT_TABLE() {
 
                                                 <Tr>
                                                     <Td>Major</Td>
-                                                    <Td>
-                                                        {currentproject?.major.name}
-                                                    </Td>
+                                                    {
+                                                        currentproject ? <Td>
+                                                            {currentproject.major?.name}
+                                                        </Td> : null
+                                                    }
+
                                                 </Tr>
                                                 <Tr>
                                                     <Td>Lecturer</Td>
@@ -246,8 +260,8 @@ export function PROJECT_TABLE() {
                                                     <Td>Students</Td>
                                                     <Td>
                                                         {
-                                                            liststudent.map((x: any) => (
-                                                                <div key={x._id}>
+                                                            liststudent ? liststudent.map((x) => (
+                                                                <div >
                                                                     studentId : {x.mssv}
                                                                     <br /><br />
                                                                     name : {x.firstName} {x.lastName}
@@ -256,7 +270,7 @@ export function PROJECT_TABLE() {
                                                                     <br />
                                                                     <br />
                                                                 </div>
-                                                            ))
+                                                            )) : null
                                                         }
                                                     </Td>
                                                 </Tr>

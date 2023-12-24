@@ -34,12 +34,15 @@ const ADD_PROJECT_FORM = () => {
         await AdminAPI.ManageProject.createOne(formDataPost).then((data) => {
             console.log(data)
             toast({
-                title: "Create successful", status: "success", duration: 9000, isClosable: true, position: "top",
+                title: "Create successful", status: "success", duration: 1000, isClosable: true, position: "top",
+                onCloseComplete: () => {
+                    window.location.reload()
+                },
             });
         }).catch(err => {
             console.log(err)
             toast({
-                title: err.response.data.message, status: "error", duration: 9000, isClosable: true, position: "top",
+                title: err.response.data.message, status: "error", duration: 1000, isClosable: true, position: "top",
             });
         })
     }
