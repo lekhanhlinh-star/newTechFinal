@@ -1,6 +1,6 @@
 import axios from "axios";
 import queryString from "query-string";
-import {useCookies,Cookies} from "react-cookie";
+import { useCookies } from "react-cookie";
 
 
 /**
@@ -9,8 +9,8 @@ import {useCookies,Cookies} from "react-cookie";
  * @type {Object}
  * @property {string} 'Content-Type' - The value for the 'Content-Type' header field.
  */
-const jwt=Cookies;
-console.log(jwt)
+
+
 const header_default = {
     'Content-Type': 'application/json',
 }
@@ -68,6 +68,7 @@ const getOne = async (endpoint: string, id: string, headers: object = header_def
  * @param {object} headers - The optional headers to include in the request.
  * @returns {Promise} A Promise that resolves to the response data.
  */
+
 const getAll = async (endpoint: string, params: object = {}, headers: object = header_default) => {
 
     return await AxiosClient.get(endpoint, {
@@ -101,7 +102,6 @@ const updateOne = async (endpoint: string, id: string, data: object, headers: ob
  * @returns {Promise} - A promise that resolves to the response of the request.
  */
 const createOne = async (endpoint: string, data: object, header: object = header_default) => {
-    console.log("headers",header)
     return await AxiosClient.post(endpoint, data, {
         headers: header
     })
@@ -136,7 +136,7 @@ const deleteOne = async (endpoint: string, id: string, header: object = header_d
  */
 
 
-const ApiGenerator = (apiEndpoint: string) => ({
+const ApiGenerator = (apiEndpoint: string,) => ({
     getAll: (params: object) => apiService.getAll(apiEndpoint, params),
     getOne: (id: string) => apiService.getOne(apiEndpoint, id),
     createOne: (data: object,headers:object=header_default) => apiService.createOne(apiEndpoint, data,headers),

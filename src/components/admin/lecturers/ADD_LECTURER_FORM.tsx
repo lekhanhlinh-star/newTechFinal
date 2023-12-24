@@ -24,7 +24,7 @@ interface classinterface {
 const ADD_LECTURER_FORM = () => {
     const [cookies] = useCookies();
     const token = cookies.jwt;
-    console.log(token)
+
     const toast = useToast();
     const [classarr, setclassarr] = useState<classinterface[]>([])
     const [formDataPost, setFormDataPost] = useState<user_model>(
@@ -41,8 +41,11 @@ const headers = {
         'Content-Type': 'application/json', 'authorization': 'Bearer ' + token
     }
     const handleClick = async () => {
+        console.log(formDataPost)
 
-        await AdminAPI.ManageStudent.createOne(formDataPost, headers).then((data) => {
+        await AdminAPI.ManageStudent.createOne(formDataPost, {
+            'Content-Type': 'application/json', 'authorization': 'Bearer ' + token
+        }).then((data) => {
             console.log(data)
             toast({
                 title: "Create successful", status: "success", duration: 9000, isClosable: true, position: "top",
