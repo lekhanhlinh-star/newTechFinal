@@ -9,6 +9,7 @@ import { AdminLecturersPage } from "../pages/admin/AdminLecturerPage";
 import { AdminProjectsPage } from "../pages/admin/AdminProjectPage";
 import { AdminMajorPage } from "../pages/admin/AdminMajorPage";
 import { AdminNotificationrPage } from "../pages/admin/AdminNotiPage";
+import {ProtectedAdminRoute} from "../components/auth/ProtectedAdminRoute";
 
 
 
