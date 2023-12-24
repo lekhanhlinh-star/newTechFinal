@@ -31,13 +31,39 @@ interface Student {
     };
     schoolYear: string;
 }
+interface Major {
+    _id: string;
+    name: string;
+    description: string;
+    timeRegistrationProjectStart: string;
+    timeRegistrationProjectEnd: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+}
 
+interface ProjectInterface {
+    status: string;
+    review: string;
+    score: number;
+    _id: string;
+    name: string;
+    description: string;
+    lecturer: string | null;
+    schoolYear: string;
+    major: Major | null;
+    report: any[]; // You can replace `any` with the appropriate type for the `report` array
+    createdAt: string;
+    updatedAt: string;
+    startDate: string;
+    endDate: string;
+}
 
 export function PROJECT_TABLE() {
-    const [projectList, setprojectList] = useState<any[]>([])
+    const [projectList, setprojectList] = useState<ProjectInterface[]>([])
     const [page, setpage] = useState(1)
     const [loading, setLoading] = useState(false);
-    const [currentproject, Setcurrentproject] = useState<any>()
+    const [currentproject, Setcurrentproject] = useState<ProjectInterface>()
     const toast = useToast();
 
     const [liststudent, setliststudent] = useState<Student[]>([])
@@ -165,11 +191,11 @@ export function PROJECT_TABLE() {
                                                 <Avatar
                                                     src={""}>
                                                 </Avatar>
-                                                <Text ml={5}>{`${x.name}`}</Text>
+                                                <Text ml={5}>{`${x?.name}`}</Text>
                                             </Flex>
                                         </Td>
                                         <Td> {x.schoolYear}</Td>
-                                        <Td> {x.major.name}</Td>
+                                        <Td> {x.major?.name}</Td>
                                         <Td>{x.status}</Td>
 
                                     </Tr>
@@ -218,9 +244,12 @@ export function PROJECT_TABLE() {
 
                                                 <Tr>
                                                     <Td>Major</Td>
-                                                    <Td>
-                                                        {currentproject?.major.name}
-                                                    </Td>
+                                                    {
+                                                        currentproject ? <Td>
+                                                            {currentproject.major?.name}
+                                                        </Td> : null
+                                                    }
+
                                                 </Tr>
                                                 <Tr>
                                                     <Td>Lecturer</Td>
