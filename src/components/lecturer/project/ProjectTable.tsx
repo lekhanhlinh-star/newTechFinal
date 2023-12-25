@@ -57,19 +57,6 @@ export function ProjectTable() {
         }
         fetchProject()
     }, []);
-    const handle_click_project = async (id: string) => {
-
-        await apiService.getOne("projects", id)
-            .then(response => {
-                const data = response.data.data
-                setProject(data)
-            })
-            .catch(error => {
-                console.log(error)
-            })
-
-
-    }
 
 
     return (<>

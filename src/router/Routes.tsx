@@ -14,6 +14,9 @@ import { StudentPage } from "../pages/student/StudentPage";
 
 import { StudentInfo } from "../components/student/info/StudentInfo";
 import { StudentManageProject } from "../components/student/StudentProject";
+import {PrjectMangementHoD} from "../components/lecturer/project/ProjectMangementHoD";
+import {HoDPage} from "../pages/HoD/HoDPage";
+import {EditInfoLectures} from "../components/lecturer/EditInfoLectures";
 
 
 
@@ -26,10 +29,17 @@ const Routes = () => {
             path: "/login", element: <Login_page />
         },
         {
+              path: "/lecturers/info", element: <EditInfoLectures></EditInfoLectures>
+        }
+
+        ,
+        {
         path: "/lecturers/projects/", element: <LecturerPage></LecturerPage>
         }
         ,{
         path: "/lecturers/projects/:id", element: <DetailProject></DetailProject>
+        },{
+        path: "/lecturers/HoD/projects/",element: <HoDPage></HoDPage>
         }]
     const routesForAdmin = [{
         path: "/admin", element: <ProtectedAdminRoute/>, children: [{
@@ -54,7 +64,7 @@ const Routes = () => {
     }]
 
 
-    const router = createBrowserRouter([...routesForPublic])
+    const router = createBrowserRouter([...routesForPublic,...routesForAdmin])
     return <RouterProvider router={router} />
 }
 export default Routes

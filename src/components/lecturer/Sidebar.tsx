@@ -38,12 +38,13 @@ interface LinkItemProps {
 }
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Home', icon: FiHome, link: "/" },
-  { name: 'Profile', icon: CgProfile, link: "#" },
+  { name: 'Profile', icon: CgProfile, link: "/lecturers/info" },
   // { name: 'Student', icon: FaFacebookMessenger, link: "#" },
 
   { name: 'Project', icon: FiCompass, link: "/lecturers/projects" },
   // { name: 'Favourites', icon: FiStar, link: "/" },
   // { name: 'Logout', icon: HiOutlineLogout, link: "/" },
+     { name: 'Phê Duyệt', icon: FiCompass, link: "/lecturers/HoD/projects/" }
 ]
 
 
