@@ -2,7 +2,7 @@ import { Avatar, Button, Container, Text, Flex, Modal, ModalBody, ModalCloseButt
 import { memo, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import { AddIcon, BellIcon, CheckIcon } from "@chakra-ui/icons";
+import { AddIcon, BellIcon, CheckIcon, LinkIcon } from "@chakra-ui/icons";
 import StudentEditTask from "./StudentEditTask";
 
 
@@ -43,7 +43,6 @@ export function StudentProjectManage(data: any) {
                     'Content-Type': 'application/json', 'authorization': 'Bearer ' + data.token
                 }
             }).then(data => {
-                console.log(data.data.data.data)
                 settasksprogress(data.data.data.data)
             }).catch((err) => {
                 console.log(err)
@@ -54,6 +53,8 @@ export function StudentProjectManage(data: any) {
                     'Content-Type': 'application/json', 'authorization': 'Bearer ' + data.token
                 }
             }).then(data => {
+                console.log(data.data.data.data)
+
                 settasksdone(data.data.data.data)
             }).catch((err) => {
                 console.log(err)
@@ -170,8 +171,15 @@ export function StudentProjectManage(data: any) {
                         }}>
                             <Text flex={1} textAlign={"left"}>{x.task}</Text>
                             <Text flex={1} textAlign={"left"}>{x.descriptionOfStudent}</Text>
-                            <Text flex={1} textAlign={"left"}>{x.review}</Text>
-                            <Text flex={1} textAlign={"left"}>{x.report}</Text>
+                            {/* <Text flex={1} textAlign={"left"}>{x.report[0].filename}</Text>
+                             */}
+                            <Text flex={1} textAlign={"left"}>{x.updatedAt.slice(0, 10)}</Text>
+                            <Button rightIcon={<LinkIcon />} flex={1}
+                                mr={10}
+                                maxW={40}
+                                onClick={() => window.open(`${process.env.REACT_APP_GOOGLE_OAUTH_ENDPOINT}/uploads/${x.report[0].filename}`, "_blank")}
+
+                            >Goto File</Button>
                         </Flex>
                     )
                 }
