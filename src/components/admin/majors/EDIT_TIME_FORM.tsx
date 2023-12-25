@@ -3,6 +3,7 @@ import axios from "axios";
 import { memo, useEffect, useState } from "react";
 import AdminAPI from "../../../api/adminAPI";
 import DateTimePicker from "react-datetime-picker";
+import { useCookies } from "react-cookie";
 
 interface major_model {
     timeRegistrationProjectStart: string;
@@ -12,6 +13,8 @@ interface major_model {
 
 const EDIT_TIME_FORM = (data: any) => {
     const toast = useToast();
+    const [cookies] = useCookies();
+    const token = cookies.jwt;
     const [formDataPost, setFormDataPost] = useState<major_model>(
         {
             timeRegistrationProjectStart: "",
@@ -52,7 +55,12 @@ const EDIT_TIME_FORM = (data: any) => {
         console.log(formDataPost)
         const dataupdate = stringtodate()
         console.log(dataupdate)
-        await AdminAPI.ManageMajor.updateOne(data.data._id, dataupdate).then(async (data) => {
+        await axios.patch("http://127.0.0.1:5000/api/v1/majors/" + data.data._id, dataupdate, {
+            headers: {
+                'Content-Type': 'application/json', 'authorization': 'Bearer ' + token
+            }
+        }
+        ).then(async (data) => {
             console.log(data)
             toast({
                 title: "Update successful",

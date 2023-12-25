@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Flex, Heading, Icon, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spacer, Stack, Table, TableCaption, TableContainer, Tbody, Td, Text, Tfoot, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
+import { Avatar, Box, Button, Flex, Heading, Icon, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spacer, Stack, Table, TableCaption, TableContainer, Tbody, Td, Text, Tfoot, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { apiService } from "../../../api/AxiosClient";
 import AdminAPI from "../../../api/adminAPI";
@@ -7,6 +7,7 @@ import { BeatLoader } from "react-spinners";
 import EDIT_LECTURER_FORM from "../lecturers/EDIT_LECTURER_FORM";
 import EDIT_PROJECT_FORM from "./EDIT_PROJECT_FORM";
 import React from "react";
+import { useCookies } from "react-cookie";
 // import EDIT_STUDENT_FORM from './EDIT_PROJECT_FORM'
 // https://www.figma.com/file/KlFNRecPC4tpKx6RKMIKX5/School-Management-Admin-Dashboard-UI-(Community)?type=design&node-id=293-32589&mode=design&t=PQEmOO8MvaplyP75-0
 interface Student {
@@ -65,7 +66,8 @@ export function PROJECT_TABLE() {
     const [loading, setLoading] = useState(false);
     const [currentproject, Setcurrentproject] = useState<ProjectInterface>()
     const toast = useToast();
-
+    const [cookies] = useCookies();
+    const token = cookies.jwt;
     const [liststudent, setliststudent] = useState<Student[]>([])
     const { isOpen: isOpen1, onOpen: onOpen1, onClose: onClose1 } = useDisclosure()
 
@@ -123,10 +125,13 @@ export function PROJECT_TABLE() {
     }
 
     const handledelete = async (id: any) => {
-        await AdminAPI.ManageProject.deleteOne(id).then(data => {
+        await AdminAPI.ManageProject.deleteOne(id, {
+            'Content-Type': 'application/json', 'authorization': 'Bearer ' + token
+
+        }).then(data => {
             console.log(data)
             toast({
-                title: "Delete successful", status: "success", duration: 9000, isClosable: true, position: "top", onCloseComplete: () => window.location.reload()
+                title: "Delete successful", status: "success", duration: 1000, isClosable: true, position: "top", onCloseComplete: () => window.location.reload()
             });
 
         }
@@ -157,11 +162,12 @@ export function PROJECT_TABLE() {
     const [overlay, setOverlay] = React.useState(<OverlayOne />)
 
     return (
-
         <Flex mt={50} overscroll={"scroll"}
             overflowY={"scroll"}
             overflowX={"hidden"}
         >
+
+
             <Flex direction={"column"} flex={3} borderRight={"1px solid lightgrey"}>
                 <TableContainer >
                     <Table variant='simple'>
@@ -251,12 +257,12 @@ export function PROJECT_TABLE() {
                                                     }
 
                                                 </Tr>
-                                                <Tr>
+                                                {/* <Tr>
                                                     <Td>Lecturer</Td>
-                                                    <Td>{currentproject?.lecturer}</Td>
-                                                </Tr>
+                                                    <Td>{currentproject?.lecturer?.firstName}</Td>
+                                                </Tr> */}
 
-                                                <Tr>
+                                                {/* <Tr>
                                                     <Td>Students</Td>
                                                     <Td>
                                                         {
@@ -273,7 +279,7 @@ export function PROJECT_TABLE() {
                                                             )) : null
                                                         }
                                                     </Td>
-                                                </Tr>
+                                                </Tr> */}
 
                                             </Tbody>
 

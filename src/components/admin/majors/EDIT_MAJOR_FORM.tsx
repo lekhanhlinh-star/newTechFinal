@@ -3,6 +3,7 @@ import axios from "axios";
 import { memo, useEffect, useState } from "react";
 import { apiService } from "../../../api/AxiosClient";
 import AdminAPI from "../../../api/adminAPI";
+import { useCookies } from "react-cookie";
 
 interface major_model {
     name: string;
@@ -12,6 +13,8 @@ interface major_model {
 
 const EDIT_MAJOR_FORM = (data: any) => {
     const toast = useToast();
+    const [cookies] = useCookies();
+    const token = cookies.jwt;
     const [formDataPost, setFormDataPost] = useState<major_model>(
         {
             name: data.data.name || "",
@@ -21,7 +24,12 @@ const EDIT_MAJOR_FORM = (data: any) => {
 
     const handleClick = async () => {
         console.log(formDataPost)
-        await AdminAPI.ManageMajor.updateOne(data.data._id, formDataPost).then(async (data) => {
+        await axios.patch("http://127.0.0.1:5000/api/v1/majors/" + data.data._id, formDataPost, {
+            headers: {
+                'Content-Type': 'application/json', 'authorization': 'Bearer ' + token
+            }
+        }
+        ).then(async (data) => {
             console.log(data)
             toast({
                 title: "Update successful",

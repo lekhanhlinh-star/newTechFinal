@@ -3,6 +3,7 @@ import axios from "axios";
 import { memo, useEffect, useState } from "react";
 import { apiService } from "../../../api/AxiosClient";
 import AdminAPI from "../../../api/adminAPI";
+import { useCookies } from "react-cookie";
 
 interface project_model {
     name: string,
@@ -17,6 +18,8 @@ interface major_model {
 }
 
 const EDIT_PROJECT_FORM = (data: any) => {
+    const [cookies] = useCookies();
+    const token = cookies.jwt;
     const toast = useToast();
     const [formDataPost, setFormDataPost] = useState<project_model>(
         {
@@ -31,7 +34,11 @@ const EDIT_PROJECT_FORM = (data: any) => {
 
     const handleClick = async () => {
         console.log(formDataPost)
-        await AdminAPI.ManageProject.updateOne(data.data._id, formDataPost).then(async (data) => {
+        await axios.patch("http://localhost:5000/api/v1/projects/" + data.data._id, formDataPost, {
+            headers: {
+                'Content-Type': 'application/json', 'authorization': 'Bearer ' + token
+            }
+        }).then(async (data) => {
             console.log(data)
             toast({
                 title: "Update successful",
@@ -80,7 +87,7 @@ const EDIT_PROJECT_FORM = (data: any) => {
                 <form>
 
                     <Stack spacing={"20px"} fontFamily={"Oswald"}>
-                        <Heading my={50} textAlign="center" >Add Student</Heading>
+                        <Heading my={50} textAlign="center" >Edit Project</Heading>
 
                         <HStack spacing={14} mb={5}>
 

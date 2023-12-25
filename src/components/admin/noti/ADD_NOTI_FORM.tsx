@@ -3,6 +3,7 @@ import axios from "axios";
 import { memo, useEffect, useRef, useState } from "react";
 import { apiService } from "../../../api/AxiosClient";
 import AdminAPI from "../../../api/adminAPI";
+import { useCookies } from "react-cookie";
 
 interface noti_model_post {
     title: string,
@@ -16,6 +17,10 @@ const ADD_NOTI_FORM = () => {
     const [currentfile, setcurrentfile] = useState<string>("")
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [canclear, setcanclear] = useState(false)
+
+    const [cookies] = useCookies();
+    const token = cookies.jwt;
+
     const handleClickSelectFile = () => {
         if (fileInputRef.current) {
             fileInputRef.current.click();
@@ -62,7 +67,7 @@ const ADD_NOTI_FORM = () => {
             console.log(formDataPost)
             await axios.post("http://localhost:5000/api/v1/notifications", formDataPost, {
                 headers: {
-                    "Content-Type": "multipart/form-data",
+                    'Content-Type': 'multipart/form-data', 'authorization': 'Bearer ' + token
                 },
             }).then(response => {
                 console.log(response.data);

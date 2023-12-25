@@ -47,6 +47,7 @@ export function STUDENT_TABLE() {
     const { isOpen: isOpen1, onOpen: onOpen1, onClose: onClose1 } = useDisclosure()
     const [majorarr, setmajorarr] = useState<any[]>([])
     const [classarr, setclassarr] = useState<any[]>([])
+    const [searchValue, setSearchValue] = useState('');
 
     // const [value, setValue] = useState('Name')
     const [filter, setfilter] = useState<{ major: string, gender: string, class: string }>({ major: "", gender: "", class: "" })
@@ -94,7 +95,6 @@ export function STUDENT_TABLE() {
     useEffect(() => {
         const fetch_data = async () => {
             await apiService.getAll("classes").then(data => {
-                // console.log(data.data)
                 setclassarr(data.data.data)
             }).catch(err => {
                 console.log(err)
@@ -142,8 +142,16 @@ export function STUDENT_TABLE() {
         }
     }
 
-
-
+    const handle_search = async () => {
+        setLoading(true)
+        await AdminAPI.ManageLectures.getAll({ role: "student", page: 1, limit: 5, active: true, search: searchValue }).then((data) => {
+            setstudentlist(data.data.data)
+        })
+            .catch(err => {
+                console.log(err)
+            })
+        setLoading(false)
+    }
 
     return (
 
@@ -151,8 +159,13 @@ export function STUDENT_TABLE() {
             overflowY={"scroll"}
             overflowX={"hidden"}
         >
-            <Input minW={"777px"} h={"49px"} borderRadius={"8px"} bg={"#E0E0E0"} color={"gray.200"}
-                placeholder={"Search for a student by name or email"} mb={30}></Input>
+            <Flex mb={50}>
+                <Input flex={5} minW={"777px"} h={"49px"} borderRadius={"8px"} bg={"#E0E0E0"} color={"blue"}
+                    placeholder={"Search for a by firstname lastname or email"}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                ></Input>
+                <Button flex={2} ml={5} h={"49px"} bg={"#2671B1"} color={"white"} onClick={handle_search}> Search</Button>
+            </Flex>
 
             <Flex mb={10}>
                 <Text width={150} flex={1}>Filter by</Text>

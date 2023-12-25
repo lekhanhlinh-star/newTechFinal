@@ -3,7 +3,7 @@ import axios from "axios";
 import { memo, useEffect, useState } from "react";
 import { apiService } from "../../../api/AxiosClient";
 import AdminAPI from "../../../api/adminAPI";
-import {useCookies} from "react-cookie";
+import { useCookies } from "react-cookie";
 
 interface user_model {
     firstName: string,
@@ -37,7 +37,7 @@ const ADD_LECTURER_FORM = () => {
             gender: "Female"
         }
     );
-const headers = {
+    const headers = {
         'Content-Type': 'application/json', 'authorization': 'Bearer ' + token
     }
     const handleClick = async () => {
@@ -48,7 +48,7 @@ const headers = {
         }).then((data) => {
             console.log(data)
             toast({
-                title: "Create successful", status: "success", duration: 9000, isClosable: true, position: "top",
+                title: "Create successful", status: "success", duration: 1000, isClosable: true, position: "top",
                 onCloseComplete: () => {
                     window.location.reload();
                 }
@@ -56,7 +56,7 @@ const headers = {
         }).catch(err => {
             console.log(err)
             toast({
-                title: err.response.data.message, status: "error", duration: 9000, isClosable: true, position: "top",
+                title: err.response.data.message, status: "error", duration: 1000, isClosable: true, position: "top",
             });
         })
     }
