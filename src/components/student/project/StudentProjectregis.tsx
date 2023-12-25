@@ -5,7 +5,7 @@ import { AddIcon, ArrowLeftIcon, ArrowRightIcon, DeleteIcon, EditIcon, PhoneIcon
 import { BeatLoader } from "react-spinners";
 
 import React from "react";
-import AdminAPI from "../../api/adminAPI";
+import AdminAPI from "../../../api/adminAPI";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 // import EDIT_STUDENT_FORM from './EDIT_PROJECT_FORM'

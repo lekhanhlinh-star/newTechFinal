@@ -14,16 +14,26 @@ import {
 } from '@chakra-ui/react'
 import { DeleteIcon } from '@chakra-ui/icons';
 import AdminAPI from '../../../api/adminAPI';
+import axios from 'axios';
+import { useCookies } from 'react-cookie';
 
 
 const DELETE_STUDENT = ({ id }: { id: string }) => {
+    console.log(id)
     const { isOpen, onOpen, onClose } = useDisclosure()
     const cancelRef = useRef<HTMLButtonElement>(null);
     const toast = useToast();
-
+    const [cookies] = useCookies();
+    const token = cookies.jwt;
     const handledelete = async (id: string) => {
         console.log(id)
-        await AdminAPI.ManageStudent.deleteOne(id).then(data => {
+        console.log(token)
+
+        await axios.delete(`http://127.0.0.1:5000/api/v1/users/${id}`, {
+            headers: {
+                'Content-Type': 'application/json', 'authorization': 'Bearer ' + token
+            }
+        }).then(data => {
             console.log(data)
             toast({
                 title: "Delete successful",

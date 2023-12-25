@@ -5,6 +5,7 @@ import { ArrowLeftIcon, ArrowRightIcon, DeleteIcon, EditIcon, PhoneIcon, TimeIco
 import { BeatLoader } from "react-spinners";
 import EDIT_MAJOR_FORM from "./EDIT_MAJOR_FORM";
 import EDIT_TIME_FORM from "./EDIT_TIME_FORM";
+import { useCookies } from "react-cookie";
 // https://www.figma.com/file/KlFNRecPC4tpKx6RKMIKX5/School-Management-Admin-Dashboard-UI-(Community)?type=design&node-id=293-32589&mode=design&t=PQEmOO8MvaplyP75-0
 
 interface majortinterface {
@@ -26,7 +27,8 @@ export function MAJOR_TABLE() {
     const { isOpen: isOpen1, onOpen: onOpen1, onClose: onClose1 } = useDisclosure()
     const { isOpen: isOpen2, onOpen: onOpen2, onClose: onClose2 } = useDisclosure()
 
-
+    const [cookies] = useCookies();
+    const token = cookies.jwt;
 
 
     useEffect(() => {
@@ -72,7 +74,9 @@ export function MAJOR_TABLE() {
     }
 
     const handledelete = async (id: string) => {
-        await AdminAPI.ManageMajor.deleteOne(id).then(data => {
+        await AdminAPI.ManageMajor.deleteOne(id, {
+            'Content-Type': 'application/json', 'authorization': 'Bearer ' + token
+        }).then(data => {
             console.log(data)
             toast({
                 title: "Delete successful", status: "success", duration: 9000, isClosable: true, position: "top",

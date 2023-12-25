@@ -34,9 +34,6 @@ export function AdminLecturersPage() {
             <Stack flex={2} ml={20} mt={20} direction={"column"}>
                 <Button bg={"#2671B1"} color={"white"} h={"41px"} maxW={"235px"} onClick={onOpen}>Add
                     Lecturer</Button>
-                <Input minW={"777px"} h={"49px"} borderRadius={"8px"} bg={"#E0E0E0"} color={"gray.200"}
-                    placeholder={"Search for a student by name or email"}></Input>
-
                 <LECTURER_TABLE></LECTURER_TABLE>
             </Stack>
 

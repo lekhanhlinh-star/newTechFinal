@@ -3,6 +3,7 @@ import axios from "axios";
 import { JSXElementConstructor, memo, ReactElement, ReactNode, ReactPortal, useEffect, useState } from "react";
 import { apiService } from "../../../api/AxiosClient";
 import AdminAPI from "../../../api/adminAPI";
+import { useCookies } from "react-cookie";
 
 interface user_model {
     firstName: string,
@@ -17,6 +18,8 @@ interface user_model {
 
 const EDIT_STUDENT_FORM = (data: any) => {
     console.log(data.majorarr)
+    const [cookies] = useCookies();
+    const token = cookies.jwt;
     const toast = useToast();
     let formattedDate = "2023-12-12"
     if (data.data.birthday) {
@@ -57,7 +60,9 @@ const EDIT_STUDENT_FORM = (data: any) => {
     const handleClick = async () => {
         // console.log(formDataPost)
         console.log(formDataPost)
-        await AdminAPI.ManageStudent.updateOne(data.data._id, formDataPost).then((data) => {
+        await AdminAPI.ManageStudent.updateOne(data.data._id, formDataPost, {
+            'Content-Type': 'application/json', 'authorization': 'Bearer ' + token
+        }).then((data) => {
             toast({
                 title: "Update successful", status: "success", duration: 1000, isClosable: true, position: "top",
                 onCloseComplete: () => {

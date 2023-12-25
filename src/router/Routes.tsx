@@ -29,20 +29,23 @@ const Routes = () => {
             path: "/login", element: <Login_page />
         },
         {
-              path: "/lecturers/info", element: <EditInfoLectures></EditInfoLectures>
-        }
-
-        ,
+            path: "/lecturers/projects/", element: <LecturerPage></LecturerPage>
+        },
         {
-        path: "/lecturers/projects/", element: <LecturerPage></LecturerPage>
+            path: "/students", element: <StudentPage></StudentPage>
+        },
+        {
+            path: "/students/info", element: <StudentInfo></StudentInfo>
+        },
+        {
+            path: "students/project", element: <StudentManageProject></StudentManageProject>
+        }, {
+            path: "/lecturers/projects/:id", element: <DetailProject></DetailProject>
         }
-        ,{
-        path: "/lecturers/projects/:id", element: <DetailProject></DetailProject>
-        },{
-        path: "/lecturers/HoD/projects/",element: <HoDPage></HoDPage>
-        }]
+    ]
+
     const routesForAdmin = [{
-        path: "/admin", element: <ProtectedAdminRoute/>, children: [{
+        path: "/admin", element: <ProtectedAdminRoute />, children: [{
             path: "/admin/students/", element: <AdminStudentsPage></AdminStudentsPage>,
         },
         {
