@@ -2,12 +2,19 @@ import { Avatar, Button, Container, Text, Flex, Modal, ModalBody, ModalCloseButt
 import { memo, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import { BellIcon, CheckIcon } from "@chakra-ui/icons";
+import { AddIcon, BellIcon, CheckIcon } from "@chakra-ui/icons";
+import StudentEditTask from "./StudentEditTask";
 
 
 export function StudentProjectManage(data: any) {
     const { isOpen, onOpen, onClose } = useDisclosure()
+
     const toast = useToast();
+
+    const [tasksprogress, settasksprogress] = useState<any[]>([])
+    const [tasksdone, settasksdone] = useState<any[]>([])
+    const [loading, setLoading] = useState(true);
+
 
     const [waiting, setwaiting] = useState<any[]>([])
     useEffect(() => {
@@ -22,8 +29,39 @@ export function StudentProjectManage(data: any) {
             }).catch((err) => {
                 console.log(err)
             })
+
+
         }
         getWaiting()
+    }, [])
+
+    useEffect(() => {
+        const task = async () => {
+
+            await axios.get(`http://localhost:5000/api/v1/tasks?project=${data.data.current._id}&status=assigned`, {
+                headers: {
+                    'Content-Type': 'application/json', 'authorization': 'Bearer ' + data.token
+                }
+            }).then(data => {
+                console.log(data.data.data.data)
+                settasksprogress(data.data.data.data)
+            }).catch((err) => {
+                console.log(err)
+            })
+
+            await axios.get(`http://localhost:5000/api/v1/tasks?project=${data.data.current._id}&status=done`, {
+                headers: {
+                    'Content-Type': 'application/json', 'authorization': 'Bearer ' + data.token
+                }
+            }).then(data => {
+                settasksdone(data.data.data.data)
+            }).catch((err) => {
+                console.log(err)
+            })
+            setLoading(false)
+
+        }
+        task()
     }, [])
 
     const handleAccept = async (id: string) => {
@@ -46,9 +84,13 @@ export function StudentProjectManage(data: any) {
         })
     }
 
-    console.log(waiting)
+
+    if (loading) {
+        return <p>Loading...</p>; // Render a loading indicator while waiting for useEffect to complete
+    }
+
     return (<>
-        <Flex direction={"column"}>
+        <Flex direction={"column"} width={"100%"} >
             {
                 waiting.length != 0 ? <Button m={5} leftIcon={<BellIcon />} onClick={onOpen} color="red">{`You have ${waiting.length} waiting to accept`}
                     < Modal isOpen={isOpen} onClose={onClose} >
@@ -56,7 +98,6 @@ export function StudentProjectManage(data: any) {
                         <ModalContent minH={500}>
                             <ModalHeader>Waiting</ModalHeader>
                             <ModalCloseButton />
-
                             <ModalBody>
                                 {
                                     waiting ? waiting.map((x: any) =>
@@ -84,6 +125,59 @@ export function StudentProjectManage(data: any) {
                     </Modal>
                 </Button> : null
             }
+            <Box m={10} borderRadius={30} bg={"orange"} minH={50} minW={150} maxW={200} style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                textAlign: 'center',
+                fontFamily: "fantasy"
+            }}
+            >
+                Progress
+            </Box>
+            <Flex direction={"column"}>
+                {
+                    tasksprogress?.map(x =>
+                        <Flex py={4} px={20} _hover={{ background: "lightgray", color: "black" }}>
+                            <Text flex={1} textAlign="left">{x.task}</Text>
+                            <Text flex={1} textAlign="left">{x.startDate.slice(0, 10)}</Text>
+                            <Text flex={1} textAlign="left">{x.endDate.slice(0, 10)}</Text>
+                            <StudentEditTask data={x}></StudentEditTask>
+                        </Flex>
+                    )
+                }
+
+            </Flex>
+
+
+            <Box m={10} borderRadius={30} bg={"greenyellow"} minH={50} minW={150} maxW={200} style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                textAlign: 'center',
+                fontFamily: "fantasy"
+            }}
+            >
+                Done
+            </Box>
+
+            <Flex direction={"column"}>
+                {
+                    tasksdone?.map(x =>
+                        <Flex py={4} px={20} _hover={{
+                            background: "lightgray",
+                            color: "black",
+                        }}>
+                            <Text flex={1} textAlign={"left"}>{x.task}</Text>
+                            <Text flex={1} textAlign={"left"}>{x.descriptionOfStudent}</Text>
+                            <Text flex={1} textAlign={"left"}>{x.review}</Text>
+                            <Text flex={1} textAlign={"left"}>{x.report}</Text>
+                        </Flex>
+                    )
+                }
+
+            </Flex>
+
         </Flex >
 
     </>);

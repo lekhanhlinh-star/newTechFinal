@@ -13,7 +13,7 @@ import { ProtectedAdminRoute } from "../components/auth/ProtectedAdminRoute";
 import { StudentPage } from "../pages/student/StudentPage";
 
 import { StudentInfo } from "../components/student/info/StudentInfo";
-import { StudentManageProject } from "../components/student/StudentProject";
+import { StudentManageProject } from "../components/student/project/StudentProject";
 
 
 
@@ -26,13 +26,23 @@ const Routes = () => {
             path: "/login", element: <Login_page />
         },
         {
-        path: "/lecturers/projects/", element: <LecturerPage></LecturerPage>
+            path: "/lecturers/projects/", element: <LecturerPage></LecturerPage>
+        },
+        {
+            path: "/students", element: <StudentPage></StudentPage>
+        },
+        {
+            path: "/students/info", element: <StudentInfo></StudentInfo>
+        },
+        {
+            path: "students/project", element: <StudentManageProject></StudentManageProject>
+        }, {
+            path: "/lecturers/projects/:id", element: <DetailProject></DetailProject>
         }
-        ,{
-        path: "/lecturers/projects/:id", element: <DetailProject></DetailProject>
-        }]
+    ]
+
     const routesForAdmin = [{
-        path: "/admin", element: <ProtectedAdminRoute/>, children: [{
+        path: "/admin", element: <ProtectedAdminRoute />, children: [{
             path: "/admin/students/", element: <AdminStudentsPage></AdminStudentsPage>,
         },
         {
@@ -54,7 +64,7 @@ const Routes = () => {
     }]
 
 
-    const router = createBrowserRouter([...routesForPublic])
+    const router = createBrowserRouter([...routesForPublic, ...routesForAdmin])
     return <RouterProvider router={router} />
 }
 export default Routes

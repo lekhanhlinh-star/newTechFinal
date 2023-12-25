@@ -1,5 +1,5 @@
 import { Container, Flex } from "@chakra-ui/react";
-import StudentSlidebar from "./StudentSlidebar";
+import StudentSlidebar from "../StudentSlidebar";
 import { memo, useEffect, useRef, useState } from "react";
 import { StudentProjectregis } from "./StudentProjectregis";
 import axios from "axios";
