@@ -71,25 +71,49 @@ export function AboutComponent() {
             <Box mt={50}>
                 <Text fontSize={30}>About us</Text>
                 <Text whiteSpace="pre-wrap" textAlign="justify" fontFamily={"cursive"}>
-                    Khánh Hòa - Cao tốc Nha Trang - Đà Lạt có chiều dài dự kiến khoảng 81,5km.
-                    Sau khi dự án hoàn thành, phương tiện ôtô di chuyển từ Nha Trang lên Đà Lạt chỉ khoảng một giờ.
-                    Ngày 10.12, đơn vị tư vấn thiết kế Công ty TNHH Tập đoàn Sơn Hải
-                    (Tập đoàn Sơn Hải) đã báo cáo các phương án hướng tuyến, sơ bộ tổng mức đầu tư và các nội dung liên quan đến dự án cao tốc Nha Trang - Đà Lạt.
-                    Ông Nguyễn Viết Hải - Chủ tịch hội đồng thành viên Công ty TNHH Tập
-                    đoàn Sơn Hải - cho hay, dự án cao tốc Nha Trang - Đà Lạt có chiều dài khoảng 81,5km. Ông Hải cho rằng, sau khi dự án hoàn thành, từ Nha Trang đi Đà Lạt chỉ khoảng một giờ.
-                    "Qua đánh giá, dự án này có khá nhiều khó khăn như tuyến đường hiểm trở, địa hình phức tạp, do đó, suất đầu tư lớn, kéo theo thời gian thu phí dài nên cần sự hỗ trợ, chỉ đạo của Chính phủ, bộ, ngành, địa phương để đi đến các bước tiếp theo" - ông Hải nêu quan điểm.</Text>
+                    The project " BUILDING A WEBSITE FOR MANAGING IT PROJECT" project aims to build a web system to meet the needs of managing and tracking students' final projects in a university or similar educational institution. This website will provide an intuitive and convenient interface for students, faculty and administrators to manage projects, communicate and track progress.</Text>
             </Box>
 
             <Flex direction={"column"} mt={50}>
                 <Text fontSize={30}>Team members</Text>
-                <Flex >
-
-
+                <Flex direction={"column"}>
                     {
                         major ? major.map(x =>
-                            <Flex direction={"column"} flex={4}>
-                                <Image src="https://t3.ftcdn.net/jpg/06/17/13/26/360_F_617132669_YptvM7fIuczaUbYYpMe3VTLimwZwzlWf.jpg" flex={1}></Image>
+                            <Flex flex={4} mb={10} ml={30}>
+                                <Avatar boxSize={40} src="https://cdn-icons-png.flaticon.com/128/1048/1048949.png"></Avatar>
+                                <Flex direction={"column"}>
+                                    <Flex ml={10} mb={5} mt={4}>
+                                        <Image
+                                            boxSize='30px'
+                                            src="https://cdn-icons-png.flaticon.com/128/3596/3596091.png"
+                                            alt=""
+                                            mr={5}
+                                        />
+                                        <Text>{x.firstName} {x.lastName}</Text>
+                                    </Flex>
 
+                                    <Flex ml={10} mb={5} >
+
+                                        <Image
+                                            boxSize='30px'
+                                            src="https://cdn-icons-png.flaticon.com/128/2165/2165061.png"
+                                            alt=""
+                                            mr={5}
+                                        />
+                                        <Text>{x.email}</Text>
+                                    </Flex>
+                                    <Flex ml={10} mb={5}>
+                                        <Image
+                                            boxSize='30px'
+                                            src="https://cdn-icons-png.flaticon.com/128/126/126509.png"
+                                            alt=""
+                                            mr={5}
+                                        />
+                                        <Text>{x.phone}</Text>
+                                    </Flex>
+
+
+                                </Flex>
                             </Flex>
                         ) : null
                     }
