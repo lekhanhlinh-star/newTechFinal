@@ -2,7 +2,7 @@ import {Navigate, Outlet} from "react-router-dom";
 import {useToast} from "@chakra-ui/react";
 import {useCookies} from "react-cookie";
 
-export function ProjectedLectureRoute() {
+export function ProjectedHoDRoute() {
     const [cookies] = useCookies();
     const toast = useToast()
     const token = cookies.jwt;
@@ -21,7 +21,7 @@ export function ProjectedLectureRoute() {
             isClosable: true,
             position: 'top'
         })
-        return <Navigate to="/login"></Navigate>
+        return <Navigate to="/lecturers"></Navigate>
     }
 
     // If authenticated, render the child routes
